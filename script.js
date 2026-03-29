@@ -1,12 +1,51 @@
 const THEME_KEY = "pos-theme";
 const ACCENT_KEY = "pos-accent";
 
-const customersList = []; // Global array to store customers
-customersList.push({id: "CUS-001", name: "Customer one", phone: "0784561231", address: "Galle"}); // Sample customer for testing
-const itemsList = []; // Global array to store items
-itemsList.push({ id: "ITM-001", name: "Item one", price: 5000, qty: 10 });
+const customersList = [];
+customersList.push(
+	{ id: "CUS-001", name: "Customer one", phone: "0784561231", address: "Galle" },
+	{ id: "CUS-002", name: "Customer two", phone: "0712345678", address: "Colombo" },
+	{ id: "CUS-003", name: "Customer three", phone: "0779876543", address: "Kandy" },
+	{ id: "CUS-004", name: "Customer four", phone: "0701234567", address: "Jaffna" },
+	{ id: "CUS-005", name: "Customer five", phone: "0765432198", address: "Matara" }
+);
 
-let selectedItemId = null;
+const itemsList = [];
+itemsList.push(
+	{ id: "ITM-001", name: "Item one", price: 5000, qty: 10 },
+	{ id: "ITM-002", name: "Item two", price: 3000, qty: 5 },
+	{ id: "ITM-003", name: "Item three", price: 1500, qty: 20 },
+	{ id: "ITM-004", name: "Item four", price: 2500, qty: 15 },
+	{ id: "ITM-005", name: "Item five", price: 4000, qty: 8 }
+);
+
+const ordersDetailsList = [];
+ordersDetailsList.push(
+	{ orderId: "ORD-001", itemId: "ITM-001", qty: 2 },
+	{ orderId: "ORD-002", itemId: "ITM-002", qty: 1 },
+	{ orderId: "ORD-002", itemId: "ITM-003", qty: 3 },
+	{ orderId: "ORD-003", itemId: "ITM-004", qty: 4 },
+	{ orderId: "ORD-004", itemId: "ITM-005", qty: 2 },
+	{ orderId: "ORD-004", itemId: "ITM-001", qty: 1 },
+	{ orderId: "ORD-005", itemId: "ITM-003", qty: 5 }
+);
+
+const ordersList = [];
+ordersList.push(
+	{ id: "ORD-001", customerId: "CUS-001", date: "2024-06-01" },
+	{ id: "ORD-002", customerId: "CUS-002", date: "2024-06-02" },
+	{ id: "ORD-003", customerId: "CUS-003", date: "2024-06-03" },
+	{ id: "ORD-004", customerId: "CUS-004", date: "2024-06-04" },
+	{ id: "ORD-005", customerId: "CUS-005", date: "2024-06-05" }
+);
+
+const itemCartList = [];
+itemCartList.push(
+	{ itemId: "ITM-001", qty: 2 },
+	{ itemId: "ITM-003", qty: 1 }
+);
+
+
 
 function applyAccent(accentColor) {
 	document.body.style.setProperty("--accent", accentColor);
@@ -111,6 +150,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	getAllItems();
 });
 
+
+// --- Authentication Logic ---
+
 let username = "admin";
 let password = "admin123";
 
@@ -119,15 +161,15 @@ loginBtn.addEventListener("click", (event) => {
 	event.preventDefault();
 	const username = document.getElementById("username").value.trim();
 	const password = document.getElementById("password").value.trim();
-	
+
 	if (username === "") {
 		alert("Please enter a username.");
 		return;
-	}else if (username !== "admin") {
+	} else if (username !== "admin") {
 		alert("Invalid username. Please try again.");
 		return;
 	}
-	
+
 	if (password === "") {
 		alert("Please enter a password.");
 		return;
@@ -135,12 +177,13 @@ loginBtn.addEventListener("click", (event) => {
 		alert("Invalid password. Please try again.");
 		return;
 	}
-	
-	document.getElementById("welcome-message").textContent = `Welcome, ${username}!`;	
+
+	document.getElementById("welcome-message").textContent = `Welcome, ${username}!`;
 	document.getElementById("login").classList.add("hidden");
 	document.getElementById("main-app").classList.remove("hidden");
 
-	// getAllCustomers(); // Load customers immediately after login
+	loadCartTable();
+
 });
 
 // --- Navigation Logic ---
@@ -148,23 +191,21 @@ const navLinks = document.querySelectorAll('.nav-link');
 const pages = document.querySelectorAll('.content-section');
 
 navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = link.getAttribute('data-target');
-        
-        // Toggle Active Link
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
+	link.addEventListener('click', (e) => {
+		e.preventDefault();
+		const target = link.getAttribute('data-target');
 
-        // Toggle Active Section
-        pages.forEach(p => {
-            p.classList.remove('active');
+		navLinks.forEach(l => l.classList.remove('active'));
+		link.classList.add('active');
+
+		pages.forEach(p => {
+			p.classList.remove('active');
 			p.classList.add('hidden');
-            if(p.id === target){
+			if (p.id === target) {
 				p.classList.add('active');
 				p.classList.remove('hidden');
-			} 
-        });
+			}
+		});
 
 		if (target === 'customers') {
 			getAllCustomers(customersList);
@@ -174,17 +215,17 @@ navLinks.forEach(link => {
 		if (target === 'items') {
 			getAllItems();
 		}
-    });
+	});
 });
 
 
-// 4. Update the Dashboard Number
+
 function updateDashboardStats() {
-    const statCustomers = document.getElementById('stat-customers-count');
-    const statItems = document.getElementById('stat-items-count');
-    if (statCustomers) {
+	const statCustomers = document.getElementById('stat-customers-count');
+	const statItems = document.getElementById('stat-items-count');
+	if (statCustomers) {
 		statCustomers.textContent = customersList.length;
-    }
+	}
 	if (statItems) {
 		statItems.textContent = itemsList.length;
 	}
@@ -194,24 +235,44 @@ function formatCustomerId(id) {
 	return `CUS-${String(id).padStart(3, "0")}`;
 }
 
+function generateNewCustomerId() {
+	const maxId = customersList.reduce((max, customer) => {
+		const numPart = parseInt(customer.id.split("-")[1], 10);
+		return Math.max(max, numPart);
+	}, 0);
+	return formatCustomerId(maxId + 1);
+}
+
 function formatItemCode(id) {
 	return `ITM-${String(id).padStart(3, "0")}`;
 }
 
-function getNextItemId() {
-	if (itemsList.length === 0) {
-		return 1;
-	}
+function generateNewItemCode() {
+	const maxId = itemsList.reduce((max, item) => {
+		const numPart = parseInt(item.id.split("-")[1], 10);
+		return Math.max(max, numPart);
+	}, 0);
+	return formatItemCode(maxId + 1);
+}
 
-	return Math.max(...itemsList.map((item) => item.id)) + 1;
+function formatOrderId(id) {
+	return `ORD-${String(id).padStart(3, "0")}`;
+}
+
+function generateNewOrderId() {
+	const maxId = ordersList.reduce((max, order) => {
+		const numPart = parseInt(order.id.split("-")[1], 10);
+		return Math.max(max, numPart);
+	}, 0);
+	return formatOrderId(maxId + 1);
 }
 
 
 /* ----------------------------------------------------------------------------------------------
-                                Customers Management Logic
+								Customers Management Logic
    ----------------------------------------------------------------------------------------------*/
 
-// 5. Fetch Customers from Local Storage
+// Fetch Customers from Local Storage
 function getAllCustomers(customers = customersList) {
 	const customersTableBody = document.querySelector("#customers-table-body");
 	if (!customersTableBody) {
@@ -220,7 +281,7 @@ function getAllCustomers(customers = customersList) {
 	if (customers.length === 0) {
 		customersTableBody.innerHTML = "<tr><td colspan='5'>No customers found.</td></tr>";
 		return;
-	}else {
+	} else {
 		customersTableBody.innerHTML = "";
 		customers.forEach((customer, index) => {
 			const row = document.createElement("tr");
@@ -235,10 +296,10 @@ function getAllCustomers(customers = customersList) {
 			`;
 			customersTableBody.appendChild(row);
 		});
-	}	
+	}
 }
 
-// 6. Save Customer
+// Save Customer
 function saveCustomer() {
 	const nameInput = document.getElementById("cust-name-input");
 	const phoneInput = document.getElementById("cust-phone-input");
@@ -247,13 +308,13 @@ function saveCustomer() {
 	const phone = phoneInput.value.trim();
 	const address = addressInput.value.trim();
 
-	
+
 	const validation = isCustomerFormValid(false); // Perform duplicate phone check for new customers
 	if (!validation.isValid) {
 		alert(validation.message);
 		return;
 	}
-	const newCustomerId = formatCustomerId(customersList.length + 1);
+	const newCustomerId = generateNewCustomerId();
 	const newCustomer = { id: newCustomerId, name, phone, address };
 	customersList.push(newCustomer);
 	updateDashboardStats();
@@ -261,12 +322,12 @@ function saveCustomer() {
 	resetCustomerpage();
 }
 
-// 7. Delete Customer
+// Delete Customer
 document.addEventListener("click", (event) => {
 	if (event.target.classList.contains("customer-delete-btn")) {
 		if (!confirm("Are you sure you want to delete this customer?")) {
 			return;
-		}	
+		}
 		const index = event.target.dataset.index;
 		if (index !== undefined) {
 			customersList.splice(index, 1);
@@ -276,7 +337,7 @@ document.addEventListener("click", (event) => {
 	}
 });
 
-// 8. Update Customer
+// Update Customer
 function updateCustomer() {
 	const idInput = document.getElementById("cust-id-input");
 	const nameInput = document.getElementById("cust-name-input");
@@ -291,26 +352,23 @@ function updateCustomer() {
 		alert("Please select a customer first.");
 		return;
 	}
-	const validation = isCustomerFormValid(true); // Skip duplicate phone check for updates
+	const validation = isCustomerFormValid(true);
 	if (!validation.isValid) {
 		alert(validation.message);
 		return;
 	}
-	const index = customersList.findIndex(c => c.id === id);// Find customer by formatted ID
+	const index = customersList.findIndex(c => c.id === id);
 	if (index >= 0 && index < customersList.length) {
 		customersList[index] = { ...customersList[index], name, phone, address };
 		updateDashboardStats();
 		getAllCustomers();
-		idInput.value = "";
-		nameInput.value = "";
-		phoneInput.value = "";
-		addressInput.value = "";
+		resetCustomerpage();
 	} else {
 		alert("Invalid Customer ID.");
-	}	
+	}
 }
 
-// 9. Reset Customer Form
+// Reset Customer Form
 function resetCustomerpage() {
 	document.getElementById("cust-id-input").value = "";
 	document.getElementById("cust-name-input").value = "";
@@ -320,7 +378,7 @@ function resetCustomerpage() {
 	getAllCustomers();
 }
 
-//10. select customer from table to form
+//select customer from table to form
 document.addEventListener("click", (event) => {
 	if (event.target.tagName === "TD" && event.target.parentElement.parentElement.id === "customers-table-body") {
 		const cells = event.target.parentElement.children;
@@ -328,10 +386,10 @@ document.addEventListener("click", (event) => {
 		document.getElementById("cust-name-input").value = cells[1].textContent;
 		document.getElementById("cust-phone-input").value = cells[2].textContent;
 		document.getElementById("cust-address-input").value = cells[3].textContent;
-	}	
+	}
 });
 
-// 11. Validate Customer Form
+// Validate Customer Form
 function isCustomerFormValid(skipDuplicateCheck = false) {
 	const nameInput = document.getElementById("cust-name-input");
 	const phoneInput = document.getElementById("cust-phone-input");
@@ -351,7 +409,7 @@ function isCustomerFormValid(skipDuplicateCheck = false) {
 	if (!/^\d{10}$/.test(phone)) {
 		return { isValid: false, message: "Phone must be exactly 10 digits." };
 	} else if (!skipDuplicateCheck) {
-		const existingCustomer = customersList.find(c => c.phone === phone);	
+		const existingCustomer = customersList.find(c => c.phone === phone);
 		if (existingCustomer) {
 			return { isValid: false, message: "Phone number already exists." };
 		}
@@ -364,37 +422,37 @@ function isCustomerFormValid(skipDuplicateCheck = false) {
 	return { isValid: true, message: "" };
 }
 
-// 12. Search Customers
-document.getElementById("customer-search").addEventListener("input", function() {
-    const query = this.value.toLowerCase().trim();
-    const tableBody = document.querySelector("#customers-table-body");
+// Search Customers
+document.getElementById("customer-search").addEventListener("input", function () {
+	const query = this.value.toLowerCase().trim();
+	const tableBody = document.querySelector("#customers-table-body");
 
-    // 1. If search is empty, show everyone and stop
-    if (!query) {
-        getAllCustomers(customersList);
-        return;
-    }
+	if (!query) {
+		getAllCustomers(customersList);
+		return;
+	}
 
-    // 2. The "Easy" Filter: Check all properties at once
-    const filtered = customersList.filter(customer => 
-        Object.values(customer).some(val => 
-            String(val).toLowerCase().includes(query)
-        )
-    );
+	const filtered = customersList.filter(customer =>
+		Object.values(customer).some(val =>
+			String(val).toLowerCase().includes(query)
+		)
+	);
 
-    // 3. Update the UI
-    if (filtered.length === 0) {
-        tableBody.innerHTML = "<tr><td colspan='5'>No customers found.</td></tr>";
-    } else {
-        tableBody.innerHTML = ""; // Clear table
-        getAllCustomers(filtered); // Reuse your existing render function
-    }
+	if (filtered.length === 0) {
+		tableBody.innerHTML = "<tr><td colspan='5'>No customers found.</td></tr>";
+	} else {
+		tableBody.innerHTML = "";
+		getAllCustomers(filtered);
+	}
 });
 
 /* ----------------------------------------------------------------------------------------------
-                                   Items Management Logic
+								   Items Management Logic
    ----------------------------------------------------------------------------------------------*/
 
+let selectedItemId = null;
+
+// Fetch Items from Local Storage
 function getAllItems(items = itemsList) {
 	const itemsTableBody = document.querySelector("#items-table-body");
 	if (!itemsTableBody) {
@@ -407,19 +465,21 @@ function getAllItems(items = itemsList) {
 	}
 
 	itemsTableBody.innerHTML = "";
-	items.forEach((item) => {
+	items.forEach((item, index) => {
 		const row = document.createElement("tr");
+		const itemId = item.id || (index + 1);
 		row.innerHTML = `
-			<td>${item.id}</td>
+			<td>${itemId}</td>
 			<td>${item.name}</td>
 			<td>${item.price}</td>
 			<td>${item.qty}</td>
-			<td><button class="buttons item-buttons btn-delete item-delete-btn" data-id="${item.id}">Delete</button></td>
+			<td><button class="buttons item-buttons btn-delete item-delete-btn" data-index="${index}">Delete</button></td>
 		`;
 		itemsTableBody.appendChild(row);
 	});
 }
 
+// Validate Item Form
 function isItemFormValid() {
 	const itemNameInput = document.getElementById("item-name-input");
 	const itemPriceInput = document.getElementById("item-price-input");
@@ -448,6 +508,7 @@ function isItemFormValid() {
 	return { isValid: true, message: "" };
 }
 
+// Save Item
 function saveItem() {
 	const validation = isItemFormValid();
 	if (!validation.isValid) {
@@ -458,7 +519,7 @@ function saveItem() {
 	const name = document.getElementById("item-name-input").value.trim();
 	const price = Number(document.getElementById("item-price-input").value);
 	const qty = Number(document.getElementById("item-qty-input").value);
-	const newItemId = formatItemCode(getNextItemId());
+	const newItemId = generateNewItemCode();
 
 	itemsList.push({
 		id: newItemId,
@@ -472,7 +533,13 @@ function saveItem() {
 	resetItemPage();
 }
 
+// Update Item
 function updateItem() {
+	const itemCodeInput = document.getElementById("item-code-input");
+	const itemNameInput = document.getElementById("item-name-input");
+	const itemPriceInput = document.getElementById("item-price-input");
+	const itemQtyInput = document.getElementById("item-qty-input");
+
 	if (selectedItemId === null) {
 		alert("Please select an item first.");
 		return;
@@ -485,16 +552,16 @@ function updateItem() {
 	}
 
 	const index = itemsList.findIndex((item) => item.id === selectedItemId);
-	if (index === -1) {
+	if (index < 0 || index >= itemsList.length) {
 		alert("Invalid item code.");
 		return;
 	}
 
 	itemsList[index] = {
 		...itemsList[index],
-		name: document.getElementById("item-name-input").value.trim(),
-		price: Number(document.getElementById("item-price-input").value),
-		qty: Number(document.getElementById("item-qty-input").value)
+		name: itemNameInput.value.trim(),
+		price: Number(itemPriceInput.value),
+		qty: Number(itemQtyInput.value)
 	};
 
 	updateDashboardStats();
@@ -502,7 +569,9 @@ function updateItem() {
 	resetItemPage();
 }
 
+// Reset Item Form
 function resetItemPage() {
+	document.getElementById("item-code-input").value = "";
 	document.getElementById("item-name-input").value = "";
 	document.getElementById("item-price-input").value = "";
 	document.getElementById("item-qty-input").value = "";
@@ -511,25 +580,24 @@ function resetItemPage() {
 	getAllItems();
 }
 
+
+// Delete Item
 document.addEventListener("click", (event) => {
 	if (event.target.classList.contains("item-delete-btn")) {
 		if (!confirm("Are you sure you want to delete this item?")) {
 			return;
 		}
 
-		const id = Number(event.target.dataset.id);
-		const index = itemsList.findIndex((item) => item.id === id);
-		if (index !== -1) {
+		const index = event.target.dataset.index;
+		if (index !== undefined) {
 			itemsList.splice(index, 1);
 			updateDashboardStats();
 			getAllItems();
-			if (selectedItemId === id) {
-				resetItemPage();
-			}
 		}
 	}
 });
 
+// Select item from table to form
 document.addEventListener("click", (event) => {
 	if (event.target.tagName === "TD" && event.target.parentElement.parentElement.id === "items-table-body") {
 		const cells = event.target.parentElement.children;
@@ -543,35 +611,91 @@ document.addEventListener("click", (event) => {
 	}
 });
 
-const saveItemButton = document.getElementById("save-item");
-const updateItemButton = document.getElementById("update-item");
-const resetItemButton = document.getElementById("reset-item");
 
-const itemSearchInput = document.getElementById("item-search");
-if (itemSearchInput) {
-	itemSearchInput.addEventListener("input", function () {
-		const query = this.value.toLowerCase().trim();
+// Search Items
+document.getElementById("item-search").addEventListener("input", function () {
+	const query = this.value.toLowerCase().trim();
+	const tableBody = document.querySelector("#items-table-body");
 
-		if (!query) {
-			getAllItems(itemsList);
-			return;
+
+	if (!query) {
+		getAllItems(itemsList);
+		return;
+	}
+
+
+	const filtered = itemsList.filter(item =>
+		Object.values(item).some(val =>
+			String(val).toLowerCase().includes(query)
+		)
+	);
+
+
+	if (filtered.length === 0) {
+		tableBody.innerHTML = "<tr><td colspan='5'>No items found.</td></tr>";
+	} else {
+		tableBody.innerHTML = "";
+		getAllItems(filtered);
+	}
+});
+
+
+/* ----------------------------------------------------------------------------------------------
+								   Orders Management Logic
+   ----------------------------------------------------------------------------------------------*/
+
+const customerSelector = document.getElementById("order-customer-select");
+customersList.forEach(customer => {
+	const option = document.createElement("option");
+	option.value = customer.id;
+	option.textContent = `${customer.name} (${customer.id})`;
+	customerSelector.appendChild(option);
+});
+
+
+// load cart items
+function loadCartTable() {
+	const cartTableBody = document.querySelector("#cart-table-body");
+	if (!cartTableBody) {
+		return;
+	}
+	cartTableBody.innerHTML = "";
+	itemCartList.forEach((detail, index) => {
+		const item = itemsList.find(i => i.id === detail.itemId);
+		if (item) {
+			const row = document.createElement("tr");
+			row.innerHTML = `
+				<td>${item.id}</td>
+				<td>${item.name}</td>
+				<td>${item.price}</td>
+				<td>${detail.qty}</td>
+				<td>${item.price * detail.qty}</td>
+				<td><button class="buttons order-buttons btn-delete cart-item-delete-btn" data-index="${index}">-</button></td>	
+			`;
+			cartTableBody.appendChild(row);
 		}
-
-		const filteredItems = itemsList.filter((item) => {
-			const code = formatItemCode(item.id).toLowerCase();
-			return (
-				code.includes(query) ||
-				item.name.toLowerCase().includes(query) ||
-				String(item.price).includes(query) ||
-				String(item.qty).includes(query)
-			);
-		});
-
-		getAllItems(filteredItems);
 	});
 }
 
-   
+customerSelector.addEventListener("change", selectCustomerForOrder);
 
-	
+function selectCustomerForOrder() {
+	const customerIdInput = document.getElementById("order-cust-id");
+	const customerNameInput = document.getElementById("order-cust-name");
+	const customerPhoneInput = document.getElementById("order-cust-phone");
+	const customerAddressInput = document.getElementById("order-cust-address");
 
+	const selectedCustomer = document.getElementById("order-customer-select").value;
+	if (!selectedCustomer) {
+		return;
+	}	
+	const customer = customersList.find(c => c.id === selectedCustomer);
+	if (customer) {
+		customerIdInput.value = customer.id;
+		customerNameInput.value = customer.name;
+		customerPhoneInput.value = customer.phone;
+		customerAddressInput.value = customer.address;
+	} else {
+		alert("Selected customer not found.");
+	}
+}
