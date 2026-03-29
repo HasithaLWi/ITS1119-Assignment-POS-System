@@ -644,13 +644,41 @@ document.getElementById("item-search").addEventListener("input", function () {
 								   Orders Management Logic
    ----------------------------------------------------------------------------------------------*/
 
+// Generate new order ID and set to order form
+const newOrderId = generateNewOrderId();
+document.getElementById("order-id-display").value = newOrderId;
+
+// Set today's date to order form
+const orderDateInput = document.getElementById("order-date");
+const today = new Date().toISOString().split("T")[0];
+if (orderDateInput) {
+	orderDateInput.value = today;
+}
+
+// Populate customer dropdown in order form
 const customerSelector = document.getElementById("order-customer-select");
+
+const optionDefault = document.createElement("option");
+optionDefault.value = "";
+optionDefault.textContent = "Select None";
+customerSelector.appendChild(optionDefault);
+
 customersList.forEach(customer => {
 	const option = document.createElement("option");
 	option.value = customer.id;
 	option.textContent = `${customer.name} (${customer.id})`;
 	customerSelector.appendChild(option);
 });
+
+// Populate item dropdown in order form
+const itemSelector = document.getElementById("order-item-select");
+
+itemsList.forEach(item => {
+	const option = document.createElement("option");
+	option.value = item.id;
+	option.textContent = `${item.name} (${item.id})`;
+	itemSelector.appendChild(option);
+});	
 
 
 // load cart items
@@ -677,6 +705,7 @@ function loadCartTable() {
 	});
 }
 
+// Select customer for order
 customerSelector.addEventListener("change", selectCustomerForOrder);
 
 function selectCustomerForOrder() {
@@ -686,9 +715,13 @@ function selectCustomerForOrder() {
 	const customerAddressInput = document.getElementById("order-cust-address");
 
 	const selectedCustomer = document.getElementById("order-customer-select").value;
-	if (!selectedCustomer) {
+	if (selectedCustomer === "") {
+		customerIdInput.value = "----";
+		customerNameInput.value = "Walk-in Customer";
+		customerPhoneInput.value = "----";
+		customerAddressInput.value = "----";
 		return;
-	}	
+	}
 	const customer = customersList.find(c => c.id === selectedCustomer);
 	if (customer) {
 		customerIdInput.value = customer.id;
@@ -699,3 +732,29 @@ function selectCustomerForOrder() {
 		alert("Selected customer not found.");
 	}
 }
+
+itemSelector.addEventListener("change", selectItemForOrder);
+
+function selectItemForOrder() {	
+
+	const itemIdInput = document.getElementById("order-item-code");
+	const itemNameInput = document.getElementById("order-item-name");
+	const itemPriceInput = document.getElementById("order-item-price");
+	const itemQtyInput = document.getElementById("order-item-qty-on-hand");
+
+	const selectedItemId = document.getElementById("order-item-select").value;
+	if (!selectedItemId) {
+		return;
+	}
+	const item = itemsList.find(i => i.id === selectedItemId);
+	if(item) {
+		itemIdInput.value = item.id;
+		itemNameInput.value = item.name;
+		itemPriceInput.value = item.price;
+		itemQtyInput.value = item.qty;
+	} else {
+		alert("Selected item not found.");
+	}
+}
+
+
