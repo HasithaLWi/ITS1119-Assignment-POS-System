@@ -32,11 +32,11 @@ ordersDetailsList.push(
 
 const ordersList = [];
 ordersList.push(
-	{ id: "ORD-001", customerId: "CUS-001", date: "2024-06-01", total: 10000, discount: 500, paid: 9500 },
-	{ id: "ORD-002", customerId: "CUS-002", date: "2024-06-02", total: 5000, discount: 250, paid: 4750 },
-	{ id: "ORD-003", customerId: "CUS-003", date: "2024-06-03", total: 15000, discount: 750, paid: 14250 },
-	{ id: "ORD-004", customerId: "CUS-004", date: "2024-06-04", total: 12500, discount: 625, paid: 11875 },
-	{ id: "ORD-005", customerId: "CUS-005", date: "2024-06-05", total: 8500, discount: 425, paid: 8075 }
+	{ id: "ORD-001", customerId: "CUS-001", date: "2024-06-01", total: 10000, discount: 500, paid: 9500, ordersDetails: [] },
+	{ id: "ORD-002", customerId: "CUS-002", date: "2024-06-02", total: 5000, discount: 250, paid: 4750, ordersDetails: [] },
+	{ id: "ORD-003", customerId: "CUS-003", date: "2024-06-03", total: 15000, discount: 750, paid: 14250, ordersDetails: [] },
+	{ id: "ORD-004", customerId: "CUS-004", date: "2024-06-04", total: 12500, discount: 625, paid: 11875, ordersDetails: [] },
+	{ id: "ORD-005", customerId: "CUS-005", date: "2024-06-05", total: 8500, discount: 425, paid: 8075, ordersDetails: [] }
 );
 
 const itemCartList = [];
@@ -182,7 +182,9 @@ loginBtn.addEventListener("click", (event) => {
 	document.getElementById("login").classList.add("hidden");
 	document.getElementById("main-app").classList.remove("hidden");
 
-	loadCartTable();
+	resetCustomerpage();
+	resetItemPage();
+	resetOrderForm();
 
 });
 
@@ -229,11 +231,28 @@ navLinks.forEach(link => {
 function updateDashboardStats() {
 	const statCustomers = document.getElementById('stat-customers-count');
 	const statItems = document.getElementById('stat-items-count');
+	const statRevenue = document.getElementById('stat-revenue');
+
 	if (statCustomers) {
 		statCustomers.textContent = customersList.length;
 	}
 	if (statItems) {
 		statItems.textContent = itemsList.length;
+	}
+	if (statRevenue) {
+		const totalRevenue = ordersList.reduce((sum, order) => {
+			const total = Number(order.total);
+			const discount = Number(order.discount);
+
+			if (Number.isFinite(total) && Number.isFinite(discount)) {
+				return sum + (total - discount);
+			}
+
+			const paid = Number(order.paid);
+			return Number.isFinite(paid) ? sum + paid : sum;
+		}, 0);
+
+		statRevenue.textContent = totalRevenue.toFixed(2);
 	}
 }
 
@@ -324,7 +343,6 @@ function saveCustomer() {
 	const newCustomer = { id: newCustomerId, name, phone, address };
 	customersList.push(newCustomer);
 	updateDashboardStats();
-	getAllCustomers();
 	resetCustomerpage();
 }
 
@@ -367,7 +385,6 @@ function updateCustomer() {
 	if (index >= 0 && index < customersList.length) {
 		customersList[index] = { ...customersList[index], name, phone, address };
 		updateDashboardStats();
-		getAllCustomers();
 		resetCustomerpage();
 	} else {
 		alert("Invalid Customer ID.");
@@ -494,6 +511,12 @@ function isItemFormValid() {
 	const name = itemNameInput.value.trim();
 	const price = Number(itemPriceInput.value);
 	const qty = Number(itemQtyInput.value);
+	if (isNaN(itemPriceInput.value) || itemPriceInput.value.trim() === "") {
+		return { isValid: false, message: "Please enter a valid price." };
+	}
+	if (isNaN(itemQtyInput.value) || itemQtyInput.value.trim() === "") {
+		return { isValid: false, message: "Please enter a valid stock quantity." };
+	}
 
 	if (name === "" || itemPriceInput.value.trim() === "" || itemQtyInput.value.trim() === "") {
 		return { isValid: false, message: "Please fill in all item fields." };
@@ -507,8 +530,8 @@ function isItemFormValid() {
 		return { isValid: false, message: "Price must be greater than 0." };
 	}
 
-	if (!Number.isInteger(qty) || qty < 0) {
-		return { isValid: false, message: "Stock quantity must be 0 or more." };
+	if (Number.isNaN(qty) || !Number.isInteger(qty) || qty < 0) {
+		return { isValid: false, message: "Stock quantity must be a non-negative integer." };
 	}
 
 	return { isValid: true, message: "" };
@@ -535,7 +558,6 @@ function saveItem() {
 	});
 
 	updateDashboardStats();
-	getAllItems();
 	resetItemPage();
 }
 
@@ -571,7 +593,6 @@ function updateItem() {
 	};
 
 	updateDashboardStats();
-	getAllItems();
 	resetItemPage();
 }
 
@@ -801,14 +822,24 @@ function resetOrderForm() {
 	document.getElementById("order-cust-address").value = "";
 	document.getElementById("order-item-code").value = "";
 	document.getElementById("order-item-name").value = "";
-	document.getElementById("order-item-price").value = "";
-	document.getElementById("order-item-qty-on-hand").value = "";
+	document.getElementById("order-item-price").value = `${(0).toFixed(2)}`;
+	document.getElementById("order-item-qty-on-hand").value = 0;
 	document.getElementById("order-customer-select").value = "";
 	document.getElementById("order-item-select").value = "";
 	document.getElementById("order-item-qty").value = 1;
+	document.getElementById("discount-input").value = 0;
+	document.getElementById("cash-input").value = `${(0).toFixed(2)}`;
+	document.getElementById("balance-display").value = `${(0).toFixed(2)}`;
+	document.getElementById("order-total-display").textContent = `${(0).toFixed(2)}`;
+	document.getElementById("order-subtotal-display").textContent = `${(0).toFixed(2)}`;
+	document.getElementById("balance-label").textContent = "Balance";
+	document.getElementById("balance-label").style.color = "";
+
 	itemCartList.length = 0;
 	loadCartTable();
 	setupDateAndOrderId();
+	hideDiscountFieldError();
+	hidePaidFieldError();
 }
 
 function addItemToCart() {
@@ -856,6 +887,12 @@ function isOrderFormValid() {
 }
 
 
+let discount = 0;
+let paid = 0;
+let balance = 0;
+let totalDisplay = "0";
+let subtotalDisplay = "0";
+
 function calculateOrderTotals() {
 	const totalLabel = document.getElementById("order-total-display");
 	const subtotalLabel = document.getElementById("order-subtotal-display");
@@ -863,11 +900,7 @@ function calculateOrderTotals() {
 	const paidField = document.getElementById("cash-input");
 	const balanceField = document.getElementById("balance-display");
 
-	let discount = 0;
-	let paid = 0;
-	let balance = 0;
-	let totalDisplay = "0";
-	let subtotalDisplay = "0";
+
 
 
 	const total = itemCartList.reduce((sum, cartItem) => {
@@ -875,25 +908,30 @@ function calculateOrderTotals() {
 		return sum + (item ? item.price * cartItem.qty : 0);
 	}, 0);
 
-	if(isdiscountFieldValid().isValid) {
+	if (isdiscountFieldValid().isValid) {
 		discount = total * (Number(discountPreField.value) / 100);
 		hideDiscountFieldError();
-	}else {
+	} else {
 		showDiscountFieldError();
 	}
 
 
-	if (paidField.value.trim() !== "" && !Number.isNaN(Number(paidField.value)) && Number(paidField.value) >= 0) {
+	if (isPaidFieldValid().isValid) {
 		paid = Number(paidField.value);
+		hidePaidFieldError();
+	} else {
+		showPaidFieldError();
 	}
 
 
 	totalDisplay = `${total.toFixed(2)}`;
 	subtotalDisplay = `${(total - discount).toFixed(2)}`;
 	balance = `${(Number(subtotalDisplay) - Number(paid)).toFixed(2)}`;
+
 	totalLabel.textContent = totalDisplay;
 	subtotalLabel.textContent = subtotalDisplay;
 	balanceField.value = balance;
+	setupChangeAndDue();
 }
 
 const cashInputField = document.getElementById("cash-input");
@@ -927,21 +965,43 @@ function placeOrder() {
 	}
 
 
-	if (!isOrderFormValid().isValid) {
-		alert(isOrderFormValid().message);
+
+	if (!isPlaceOrderFormValid().isValid) {
+		alert(isPlaceOrderFormValid().message);
 		return;
 	}
 
+	const details = itemCartList.map(cartItem => ({ 
+		orderId: newOrderId,
+		itemId: cartItem.itemId,
+		qty: cartItem.qty
+	}));
 
+	ordersDetailsList.push(...details); 
+
+	details.map(detail => {
+		const item = itemsList.find(i => i.id === detail.itemId);	
+		if (item) {
+			item.qty -= detail.qty;
+		}
+	});
 
 	const newOrder = {
 		id: newOrderId,
-		customerId,
+		customerId: customerId === "" ? null : customerId,
 		date: orderDate,
-		total,
-		discount: 0,
-		paid: total
+		total: totalDisplay,
+		discount: discount,
+		paid: paid,
+		orderDetails: details
 	};
+
+
+	ordersList.push(newOrder);
+
+	alert("Order placed successfully!");
+	updateDashboardStats();
+	resetOrderForm();
 }
 
 // validate place order form
@@ -962,32 +1022,97 @@ function isPlaceOrderFormValid() {
 			return { isValid: false, message: "Selected customer not found." };
 		}
 	}
+
 	if (orderDate === "" || orderDate === null) {
 		return { isValid: false, message: "Please select an order date." };
 	}
+
 	if (discountPreField.value.trim() === "" || discountPreField.value === null) {
 		discountPreField.value = "0";
-	} else if (Number.isNaN(Number(discountPreField.value)) || Number(discountPreField.value) < 0 || Number(discountPreField.value) > 100) {
+
+	} else if (isNaN(discountInputField.value) || Number.isNaN(Number(discountPreField.value))
+		|| Number(discountPreField.value) < 0 || Number(discountPreField.value) > 100) {
+
 		return { isValid: false, message: "Please enter a valid discount amount (0%-100%)." };
 	}
+
 	if (paidField.value.trim() === "" || paidField.value === null) {
 		return { isValid: false, message: "Please enter the amount paid." };
-	} else if (Number.isNaN(Number(paidField.value)) || Number(paidField.value) < 0 || Number(paidField.value) > subtotalAmount) {
+
+	} else if (isNaN(paidField.value) || Number.isNaN(Number(paidField.value))
+		|| Number(paidField.value) < 0 || Number(paidField.value) > subtotalAmount) {
+
 		return { isValid: false, message: "Please enter a valid amount paid." };
+
 	}
 	return { isValid: true };
 }
 
-function isdiscountFieldValid() {
-	const discountPreField = document.getElementById("discount-input");
-	if (discountPreField.value.trim() === "" || discountPreField.value === null) {
-		return { isValid: true};
-	} else if (Number.isNaN(Number(discountPreField.value)) || Number(discountPreField.value) < 0 || Number(discountPreField.value) > 100) {
-		return { isValid: false};
+function setupChangeAndDue() {
+	const subtotalElement = document.getElementById("order-subtotal-display");
+	const subtotalAmount = Number(subtotalElement ? subtotalElement.textContent : 0);
+	const paidField = document.getElementById("cash-input");
+	const balanceField = document.getElementById("balance-display");
+	const balanceLabel = document.getElementById("balance-label");
+
+	if (isNaN(paidField.value)) {
+		paidField.value = `${(0).toFixed(2)}`;
+		balanceField.value = subtotalAmount.toFixed(2);
+		return;
+	}
+	if (paidField.value.trim() === "") {
+		balanceField.value = subtotalAmount.toFixed(2);
+	} else if (paidField.value < subtotalAmount) {
+		balanceField.value = (subtotalAmount - Number(paidField.value)).toFixed(2);
+		if (balanceLabel) {
+			balanceLabel.textContent = "Due:";
+			balanceLabel.style.color = "red";
+		}
+
 	} else {
-		return { isValid: true};
+		const paidAmount = Number(paidField.value);
+		const changeDue = paidAmount - subtotalAmount;
+		balanceField.value = changeDue.toFixed(2);
+		if (balanceLabel) {
+			balanceLabel.textContent = "Change:";
+			balanceLabel.style.color = "green";
+		}
 	}
 }
+
+
+function isdiscountFieldValid() {
+	const discountPreField = document.getElementById("discount-input");
+
+	if (!discountPreField) {
+		return { isValid: false };
+	}
+	if (discountPreField.value.trim() === "" || discountPreField.value === null) {
+		return { isValid: true };
+	} else if (!/^\d+(\.\d+)?$/.test(discountPreField.value)) {
+		return { isValid: false };
+	} else if (Number.isNaN(Number(discountPreField.value)) || Number(discountPreField.value) < 0 || Number(discountPreField.value) > 100) {
+		return { isValid: false };
+	} else {
+		return { isValid: true };
+	}
+}
+
+function isPaidFieldValid() {
+	const paidField = document.getElementById("cash-input");
+	const subtotalElement = document.getElementById("order-subtotal-display");
+	const subtotalAmount = Number(subtotalElement ? subtotalElement.textContent : 0);
+	if (paidField.value.trim() === "" || paidField.value === null) {
+		return { isValid: false };
+	} else if (Number.isNaN(Number(paidField.value)) || Number(paidField.value) < 0 || Number(paidField.value) > subtotalAmount) {
+		return { isValid: false };
+	} else if (isNaN(paidField.value)) {
+		return { isValid: false };
+	} else {
+		return { isValid: true };
+	}
+}
+
 
 function showDiscountFieldError() {
 	const discountPreField = document.getElementById("discount-input");
@@ -1014,5 +1139,33 @@ function hideDiscountFieldError() {
 	if (discountPreField) {
 		discountPreField.classList.remove("input-error");
 		discountPreField.style.borderColor = "";
+	}
+}
+
+function showPaidFieldError() {
+	const paidField = document.getElementById("cash-input");
+	const paidErrorLabel = document.getElementById("cash-error-label");
+	if (paidErrorLabel) {
+		paidErrorLabel.textContent = "Please enter a valid amount paid.";
+		paidErrorLabel.style.color = "red";
+		paidErrorLabel.classList.remove("hidden");
+	}
+	if (paidField) {
+		paidField.classList.add("input-error");
+		paidField.style.borderColor = "red";
+	}
+}
+
+function hidePaidFieldError() {
+	const paidField = document.getElementById("cash-input");
+	const paidErrorLabel = document.getElementById("cash-error-label");
+	if (paidErrorLabel) {
+		paidErrorLabel.textContent = "";
+		paidErrorLabel.style.color = "";
+		paidErrorLabel.classList.add("hidden");
+	}
+	if (paidField) {
+		paidField.classList.remove("input-error");
+		paidField.style.borderColor = "";
 	}
 }
