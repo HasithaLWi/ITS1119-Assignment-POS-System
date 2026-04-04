@@ -32,11 +32,11 @@ ordersDetailsList.push(
 
 const ordersList = [];
 ordersList.push(
-	{ id: "ORD-001", customerId: "CUS-001", date: "2024-06-01", total: 10000, discount: 500, paid: 9500, ordersDetails: [] },
-	{ id: "ORD-002", customerId: "CUS-002", date: "2024-06-02", total: 5000, discount: 250, paid: 4750, ordersDetails: [] },
-	{ id: "ORD-003", customerId: "CUS-003", date: "2024-06-03", total: 15000, discount: 750, paid: 14250, ordersDetails: [] },
-	{ id: "ORD-004", customerId: "CUS-004", date: "2024-06-04", total: 12500, discount: 625, paid: 11875, ordersDetails: [] },
-	{ id: "ORD-005", customerId: "CUS-005", date: "2024-06-05", total: 8500, discount: 425, paid: 8075, ordersDetails: [] }
+	{ id: "ORD-001", customerId: "CUS-001", date: "2024-06-01", total: 10000, discount: 12, paid: 8800, orderDetails: [] },
+	{ id: "ORD-002", customerId: "CUS-002", date: "2024-06-02", total: 5000, discount: 15, paid: 4250, orderDetails: [] },
+	{ id: "ORD-003", customerId: "CUS-003", date: "2024-06-03", total: 15000, discount: 0, paid: 15000, orderDetails: [] },
+	{ id: "ORD-004", customerId: "CUS-004", date: "2024-06-04", total: 12500, discount: 8, paid: 1500, orderDetails: [] },
+	{ id: "ORD-005", customerId: "CUS-005", date: "2024-06-05", total: 8500, discount: 10, paid: 7650, orderDetails: [] }
 );
 
 const itemCartList = [];
@@ -185,6 +185,7 @@ loginBtn.addEventListener("click", (event) => {
 	resetCustomerpage();
 	resetItemPage();
 	resetOrderForm();
+	resetOrderHistory();
 
 });
 
@@ -951,13 +952,7 @@ function placeOrder() {
 	const newOrderId = generateNewOrderId();
 	const customerId = document.getElementById("order-cust-id").value.trim();
 	const orderDate = document.getElementById("order-date").value;
-
-	const totalLabel = document.getElementById("order-total-display");
-	const subtotalLabel = document.getElementById("order-subtotal-display");
 	const discountPreField = document.getElementById("discount-input");
-	const paidField = document.getElementById("cash-input");
-	const balanceField = document.getElementById("balance-display");
-
 
 	if (itemCartList.length === 0) {
 		alert("Please add at least one item to the cart before placing the order.");
@@ -971,16 +966,16 @@ function placeOrder() {
 		return;
 	}
 
-	const details = itemCartList.map(cartItem => ({ 
+	const details = itemCartList.map(cartItem => ({
 		orderId: newOrderId,
 		itemId: cartItem.itemId,
 		qty: cartItem.qty
 	}));
 
-	ordersDetailsList.push(...details); 
+	ordersDetailsList.push(...details);
 
 	details.map(detail => {
-		const item = itemsList.find(i => i.id === detail.itemId);	
+		const item = itemsList.find(i => i.id === detail.itemId);
 		if (item) {
 			item.qty -= detail.qty;
 		}
@@ -991,7 +986,7 @@ function placeOrder() {
 		customerId: customerId === "" ? null : customerId,
 		date: orderDate,
 		total: totalDisplay,
-		discount: discount,
+		discount: discountPreField.value.trim() === "" ? "0" : discountPreField.value,
 		paid: paid,
 		orderDetails: details
 	};
@@ -1002,6 +997,7 @@ function placeOrder() {
 	alert("Order placed successfully!");
 	updateDashboardStats();
 	resetOrderForm();
+	resetOrderHistory();
 }
 
 // validate place order form
@@ -1168,4 +1164,164 @@ function hidePaidFieldError() {
 		paidField.classList.remove("input-error");
 		paidField.style.borderColor = "";
 	}
+}
+
+/* ----------------------------------------------------------------------------------------------
+								   Order History Management Logic
+   ----------------------------------------------------------------------------------------------*/
+const historyFilteredOrders = [];
+if(historyFilteredOrders.length === 0){
+	historyFilteredOrders.push(...ordersList);
+}
+
+function loadOrderHistory(orders = ordersList) {
+	const historyTableBody = document.querySelector("#history-table-body");
+	if (!historyTableBody) {
+		return;
+	}
+	if (orders.length === 0) {
+		historyTableBody.innerHTML = "<tr><td colspan='5'>No orders found.</td></tr>";
+		return;
+	}
+	historyTableBody.innerHTML = "";
+	orders.forEach((order) => {
+		const customer = customersList.find(c => c.id === order.customerId);
+		const discountAmount = Number(order.discount) ? (Number(order.total) * (Number(order.discount) / 100)) : 0;
+		const subtotal = Number(order.total) - discountAmount;
+		const row = document.createElement("tr");
+		row.innerHTML = `
+			<td>${order.id}</td>
+			<td>${customer ? customer.name : "Walk-in Customer"}</td>
+			<td>${order.date}</td>
+			<td>Rs ${Number(order.total).toFixed(2)}</td>
+			<td>Rs ${discountAmount.toFixed(2)}</td>
+			<td>Rs ${subtotal.toFixed(2)}</td>
+			<td>Rs ${Number(order.paid).toFixed(2)}</td>
+		`;
+		historyTableBody.appendChild(row);
+	});
+}
+
+function resetOrderHistory() {
+	const searchInput = document.getElementById("history-search");
+	const startDateInput = document.getElementById("start-date");
+	const endDateInput = document.getElementById("end-date");
+
+	if (startDateInput) {
+		startDateInput.value = "";
+	}	
+	if (endDateInput) {
+		const today = new Date();
+		endDateInput.value = today.toISOString().split("T")[0];
+	}
+	if (searchInput) {
+		searchInput.value = "";
+	}
+	historyFilteredOrders.length = 0;
+	historyFilteredOrders.push(...ordersList);
+	loadOrderHistory();
+}
+
+// Search Orders in History
+document.getElementById("history-search").addEventListener("input", function () {
+	const query = this.value.toLowerCase().trim();
+	const tableBody = document.querySelector("#history-table-body");
+	if (!query) {
+		loadOrderHistory();
+		return;
+	}
+	const filtered = historyFilteredOrders.filter(order => {
+		const customer = customersList.find(c => c.id === order.customerId);
+		const customerName = customer ? customer.name.toLowerCase() : "walk-in customer";
+		return (
+			order.id.toLowerCase().includes(query) ||
+			customerName.includes(query) ||
+			order.date.includes(query)
+		);
+	});
+	if (filtered.length === 0) {
+		tableBody.innerHTML = "<tr><td colspan='5'>No orders found.</td></tr>";
+	} else {
+		tableBody.innerHTML = "";
+		loadOrderHistory(filtered);
+	}
+});
+
+// Filter Orders by Date Range
+document.querySelectorAll(".filter-by-date").forEach((input) => {
+	const applyDateRangeFilter = () => {
+		let startDate = document.getElementById("start-date").value;
+		let endDate = document.getElementById("end-date").value;
+
+		if (!startDate && !endDate) {
+			loadOrderHistory();
+			return;
+		}
+
+		const filtered = ordersList.filter((order) => {
+			const orderDate = String(order.date || "");
+			return (!startDate || orderDate >= startDate) && (!endDate || orderDate <= endDate);
+		});
+		historyFilteredOrders.length = 0;
+		historyFilteredOrders.push(...filtered);
+		document.getElementById("history-search").value = "";
+		loadOrderHistory(filtered);
+	};
+
+	input.addEventListener("input", applyDateRangeFilter);
+	input.addEventListener("change", applyDateRangeFilter);
+});
+
+// i want select order from the tablr and show details in order form
+document.addEventListener("click", (event) => {
+	if (event.target.tagName === "TD" && event.target.parentElement.parentElement.id === "history-table-body") {
+		const cells = event.target.parentElement.children;
+		const orderId = cells[0].textContent.trim();
+		const order = ordersList.find(o => o.id === orderId);
+		if (order) {
+			document.getElementById("order-id-display").value = order.id;
+			document.getElementById("order-date").value = order.date;
+
+			const customer = customersList.find(c => c.id === order.customerId);
+			document.getElementById("order-cust-id").value = customer ? customer.id : "----";
+			document.getElementById("order-cust-name").value = customer ? customer.name : "Walk-in Customer";
+			document.getElementById("order-cust-phone").value = customer ? customer.phone : "----";
+			document.getElementById("order-cust-address").value = customer ? customer.address : "----";
+			document.getElementById("discount-input").value = order.discount;
+			document.getElementById("cash-input").value = `${(0).toFixed(2)}`;
+
+			itemCartList.length = 0;
+			order.orderDetails.forEach(detail => {
+				itemCartList.push({ itemId: detail.itemId, qty: detail.qty });
+			});
+			loadCartTable();
+			calculateOrderTotals();
+			navigateToOrderFromHistory();
+		}
+	}
+});
+
+// navidate to order
+function navigateToOrderFromHistory() {
+	const orderId = document.getElementById("order-id-display").value.trim();
+	if (orderId === "") {
+		alert("Please select an order from the history table first.");
+		return;
+	}
+	const order = ordersList.find(o => o.id === orderId);
+	if (!order) {
+		alert("Selected order not found.");
+		return;
+	}
+
+	navLinks.forEach((link) => {
+		const isOrdersLink = link.getAttribute("data-target") === "orders";
+		link.classList.toggle("active", isOrdersLink);
+	});
+
+	pages.forEach((page) => {
+		const isOrdersPage = page.id === "orders";
+		page.classList.toggle("active", isOrdersPage);
+		page.classList.toggle("hidden", !isOrdersPage);
+	});
 }

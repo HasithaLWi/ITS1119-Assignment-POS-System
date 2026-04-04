@@ -371,6 +371,21 @@ body.light-mode .btn-user {
     transform: translateY(0);
 }
 
+.input-field-labels {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.search-box input {
+    background-color: var(--input-bg);
+    border: none;
+    color: var(--text-main);
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    outline: none;
+}
+
 /* =========================================================
    5. DASHBOARD SECTION
    ========================================================= */
@@ -504,10 +519,10 @@ tbody tr:hover {
     grid-column: span 2; 
 }
 
-.input-box label, .comb-box label {
+/* .input-box label, .comb-box label {
     color: var(--text-muted);
     font-size: 0.8rem;
-}
+} */
 
 /* .input-box input, .comb-box select {
     background-color: var(--input-bg);
@@ -681,19 +696,14 @@ tbody tr:hover {
     color: white;
 }
 
-.search-box {
+.item-search-box input,
+.customer-search-box input {
     flex: 0 0 250px; 
 }
 
-.search-box input {
+.item-search-box input,
+.customer-search-box input {
     width: 100%;
-    background-color: var(--input-bg);
-    border: none;
-    color: var(--text-main);
-    padding: 10px 12px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    outline: none;
 }
 
 .search-box input::placeholder { color: var(--text-muted); }
@@ -713,14 +723,31 @@ tbody tr:hover {
 }
 
 .history-search-box {
-    flex: 0 0 450px; 
-    max-width: 50%;
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    margin-left: 50px;
 }
 
 .history-buttons {
     padding: 10px 24px;
     font-size: 0.9rem;
     color: white;
+}
+
+.history-search-box input {
+    flex: 1;
+}
+
+.search-by-date {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex: 1;
+}
+
+.search-by-date label {
+    width: 80px;
 }
 
 /* ========================================================
