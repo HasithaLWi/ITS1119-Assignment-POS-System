@@ -6,12 +6,12 @@ const customerDB = [
 	new Customer("CUS-005", "Customer five", "0765432198", "Matara")
 ];
 
-const itemsList = [
-	{ id: "ITM-001", name: "Item one", price: 5000, qty: 10 },
-	{ id: "ITM-002", name: "Item two", price: 3000, qty: 5 },
-	{ id: "ITM-003", name: "Item three", price: 1500, qty: 20 },
-	{ id: "ITM-004", name: "Item four", price: 2500, qty: 15 },
-	{ id: "ITM-005", name: "Item five", price: 4000, qty: 8 }
+const itemDB = [
+	new Item("ITM-001", "Item one", 500, 10),
+	new Item("ITM-002", "Item two", 1000, 5),
+	new Item("ITM-003", "Item three", 750, 8),
+	new Item("ITM-004", "Item four", 1200, 3),
+	new Item("ITM-005", "Item five", 300, 15)
 ];
 
 const ordersDetailsList = [

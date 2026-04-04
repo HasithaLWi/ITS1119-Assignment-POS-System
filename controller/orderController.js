@@ -1,8 +1,5 @@
 
 
-/* ----------------------------------------------------------------------------------------------
-								   Orders Management Logic
-   ----------------------------------------------------------------------------------------------*/
 const customerSelector = document.getElementById("order-customer-select");
 const itemSelector = document.getElementById("order-item-select");
 
@@ -55,7 +52,7 @@ function loadOrderPage() {
 	itemOptionDefault.textContent = "Select Item";
 	itemSelector.appendChild(itemOptionDefault);
 
-	itemsList.forEach(item => {
+	itemDB.forEach(item => {
 		const option = document.createElement("option");
 		option.value = item.id;
 		option.textContent = `${item.name} (${item.id})`;
@@ -72,7 +69,7 @@ function loadCartTable() {
 	}
 	cartTableBody.innerHTML = "";
 	itemCartList.forEach((detail, index) => {
-		const item = itemsList.find(i => i.id === detail.itemId);
+		const item = itemDB.find(i => i.id === detail.itemId);
 		if (item) {
 			const row = document.createElement("tr");
 			row.innerHTML = `
@@ -134,7 +131,7 @@ function selectItemForOrder() {
 		return;
 
 	}
-	const item = itemsList.find(i => i.id === selectedItemId);
+	const item = itemDB.find(i => i.id === selectedItemId);
 	if (item) {
 		itemIdInput.value = item.id;
 		itemNameInput.value = item.name;
@@ -169,6 +166,7 @@ function resetOrderForm() {
 	document.getElementById("balance-label").style.color = "";
 
 	itemCartList.length = 0;
+	loadOrderPage();
 	loadCartTable();
 	setupDateAndOrderId();
 	hideDiscountFieldError();
@@ -210,7 +208,7 @@ function isOrderFormValid() {
 	if (itemId === "" || Number.isNaN(qty) || qty <= 0) {
 		return { isValid: false, message: "Please select an item and enter a valid quantity." };
 	}
-	const item = itemsList.find(i => i.id === itemId);
+	const item = itemDB.find(i => i.id === itemId);
 	if (!item) {
 		return { isValid: false, message: "Selected item not found." };
 	}
@@ -238,7 +236,7 @@ function calculateOrderTotals() {
 
 
 	const total = itemCartList.reduce((sum, cartItem) => {
-		const item = itemsList.find(i => i.id === cartItem.itemId);
+		const item = itemDB.find(i => i.id === cartItem.itemId);
 		return sum + (item ? item.price * cartItem.qty : 0);
 	}, 0);
 
@@ -308,7 +306,7 @@ function placeOrder() {
 	ordersDetailsList.push(...details);
 
 	details.map(detail => {
-		const item = itemsList.find(i => i.id === detail.itemId);
+		const item = itemDB.find(i => i.id === detail.itemId);
 		if (item) {
 			item.qty -= detail.qty;
 		}
@@ -328,6 +326,8 @@ function placeOrder() {
 	ordersList.push(newOrder);
 
 	alert("Order placed successfully!");
+	loadItems();
+	loadItemTable();
 	updateDashboardStats();
 	resetOrderForm();
 	resetOrderHistory();
@@ -366,20 +366,20 @@ function updateOrder() {
 
 	// Restore previous stock before checking and applying the updated cart quantities.
 	previousDetails.forEach((detail) => {
-		const item = itemsList.find(i => i.id === detail.itemId);
+		const item = itemDB.find(i => i.id === detail.itemId);
 		if (item) {
 			item.qty += Number(detail.qty);
 		}
 	});
 
 	const exceedsStock = itemCartList.some((cartItem) => {
-		const item = itemsList.find(i => i.id === cartItem.itemId);
+		const item = itemDB.find(i => i.id === cartItem.itemId);
 		return !item || Number(cartItem.qty) > Number(item.qty);
 	});
 
 	if (exceedsStock) {
 		previousDetails.forEach((detail) => {
-			const item = itemsList.find(i => i.id === detail.itemId);
+			const item = itemDB.find(i => i.id === detail.itemId);
 			if (item) {
 				item.qty -= Number(detail.qty);
 			}
@@ -395,7 +395,7 @@ function updateOrder() {
 	}));
 
 	updatedDetails.forEach((detail) => {
-		const item = itemsList.find(i => i.id === detail.itemId);
+		const item = itemDB.find(i => i.id === detail.itemId);
 		if (item) {
 			item.qty -= detail.qty;
 		}

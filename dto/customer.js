@@ -6,5 +6,3 @@ class Customer {
         this.address = address;
     }
 }
-
-class CustomerDto extends Customer {}

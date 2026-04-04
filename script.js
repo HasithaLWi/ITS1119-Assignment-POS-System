@@ -176,7 +176,7 @@ function updateDashboardStats() {
 		statCustomers.textContent = customerDB.length;
 	}
 	if (statItems) {
-		statItems.textContent = itemsList.length;
+		statItems.textContent = itemDB.length;
 	}
 	if (statRevenue) {
 		const totalRevenue = ordersList.reduce((sum, order) => {
@@ -195,29 +195,6 @@ function updateDashboardStats() {
 	}
 }
 
-function formatCustomerId(id) {
-	return `CUS-${String(id).padStart(3, "0")}`;
-}
-
-function generateNewCustomerId() {
-	const maxId = customerDB.reduce((max, customer) => {
-		const numPart = parseInt(customer.id.split("-")[1], 10);
-		return Math.max(max, numPart);
-	}, 0);
-	return formatCustomerId(maxId + 1);
-}
-
-function formatItemCode(id) {
-	return `ITM-${String(id).padStart(3, "0")}`;
-}
-
-function generateNewItemCode() {
-	const maxId = itemsList.reduce((max, item) => {
-		const numPart = parseInt(item.id.split("-")[1], 10);
-		return Math.max(max, numPart);
-	}, 0);
-	return formatItemCode(maxId + 1);
-}
 
 function formatOrderId(id) {
 	return `ORD-${String(id).padStart(3, "0")}`;

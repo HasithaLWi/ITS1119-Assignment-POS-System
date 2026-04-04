@@ -50,7 +50,7 @@ function saveCustomer() {
 		alert(validation.message);
 		return;
 	}
-	const newCustomerId = generateNewCustomerId();
+	const newCustomerId = customerModelInstance.generateNewCustomerId();
 	const newCustomer = new Customer(newCustomerId, name, phone, address);
 
 	// customersList.push(newCustomer);

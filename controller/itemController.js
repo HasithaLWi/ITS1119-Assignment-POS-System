@@ -1,13 +1,18 @@
 
-
-/* ----------------------------------------------------------------------------------------------
-								   Items Management Logic
-   ----------------------------------------------------------------------------------------------*/
-
+const itemModelInstance = new ItemModel();
 let selectedItemId = null;
+let itemsDataList = [];
 
-// Fetch Items from Local Storage
-function getAllItems(items = itemsList) {
+
+
+function loadItems() {
+	itemsDataList = itemModelInstance.getAllItems().items;
+	if (itemModelInstance.getAllItems().isEmpty) {
+		itemsDataList = [];
+	}
+}
+
+function loadItemTable(items = itemsDataList) {
 	const itemsTableBody = document.querySelector("#items-table-body");
 	if (!itemsTableBody) {
 		return;
@@ -79,14 +84,9 @@ function saveItem() {
 	const name = document.getElementById("item-name-input").value.trim();
 	const price = Number(document.getElementById("item-price-input").value);
 	const qty = Number(document.getElementById("item-qty-input").value);
-	const newItemId = generateNewItemCode();
+	const newItemId = itemModelInstance.generateNewItemCode();
 
-	itemsList.push({
-		id: newItemId,
-		name,
-		price,
-		qty
-	});
+	itemModelInstance.saveItem(new Item(newItemId, name, price, qty));
 
 	updateDashboardStats();
 	resetItemPage();
@@ -110,18 +110,18 @@ function updateItem() {
 		return;
 	}
 
-	const index = itemsList.findIndex((item) => item.id === selectedItemId);
-	if (index < 0 || index >= itemsList.length) {
+	const index = itemsDataList.findIndex((item) => item.id === selectedItemId);
+	if (index < 0 || index >= itemsDataList.length) {
 		alert("Invalid item code.");
 		return;
 	}
 
-	itemsList[index] = {
-		...itemsList[index],
-		name: itemNameInput.value.trim(),
-		price: Number(itemPriceInput.value),
-		qty: Number(itemQtyInput.value)
-	};
+	itemModelInstance.updateItem(new Item(
+		selectedItemId, 
+		itemNameInput.value.trim(), 
+		Number(itemPriceInput.value), 
+		Number(itemQtyInput.value)
+	));
 
 	updateDashboardStats();
 	resetItemPage();
@@ -135,7 +135,8 @@ function resetItemPage() {
 	document.getElementById("item-qty-input").value = "";
 	document.getElementById("item-search").value = "";
 	selectedItemId = null;
-	getAllItems();
+	loadItems();
+	loadItemTable();
 }
 
 
@@ -148,9 +149,12 @@ document.addEventListener("click", (event) => {
 
 		const index = event.target.dataset.index;
 		if (index !== undefined) {
-			itemsList.splice(index, 1);
+
+			itemModelInstance.deleteItem(itemsDataList[index].id);
+
 			updateDashboardStats();
-			getAllItems();
+			loadItems();
+			loadItemTable();
 		}
 	}
 });
@@ -177,12 +181,12 @@ document.getElementById("item-search").addEventListener("input", function () {
 
 
 	if (!query) {
-		getAllItems(itemsList);
+		loadItemTable();
 		return;
 	}
 
 
-	const filtered = itemsList.filter(item =>
+	const filtered = itemsDataList.filter(item =>
 		Object.values(item).some(val =>
 			String(val).toLowerCase().includes(query)
 		)
@@ -193,6 +197,6 @@ document.getElementById("item-search").addEventListener("input", function () {
 		tableBody.innerHTML = "<tr><td colspan='5'>No items found.</td></tr>";
 	} else {
 		tableBody.innerHTML = "";
-		getAllItems(filtered);
+		loadItemTable(filtered);
 	}
 });
