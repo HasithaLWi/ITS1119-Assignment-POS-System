@@ -1,6 +1,7 @@
 import { Customer } from "../dto/customer.js";
 import { customerModel } from "../model/customerModel.js";
 import { updateDashboardStats } from "../script.js";
+import { resetOrderForm } from "./orderController.js";
 
 const customerModelInstance = new customerModel();
 let customerDataList = [];
@@ -61,6 +62,7 @@ export function saveCustomer() {
 
 	updateDashboardStats();
 	resetCustomerpage();
+	
 }
 
 // Delete Customer
@@ -83,6 +85,7 @@ document.addEventListener("click", (event) => {
 			loadCustomers();
 			updateDashboardStats();
 			loadCustomerTable();
+			resetOrderForm();
 		}
 	}
 });
@@ -194,4 +197,5 @@ export function resetCustomerpage() {
 	document.getElementById("customer-search").value = "";
 	loadCustomers();
 	loadCustomerTable();
+	resetOrderForm();
 }

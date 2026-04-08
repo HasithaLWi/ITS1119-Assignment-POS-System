@@ -215,18 +215,6 @@ export function updateDashboardStats() {
 }
 
 
-export function formatOrderId(id) {
-	return `ORD-${String(id).padStart(3, "0")}`;
-}
-
-export function generateNewOrderId() {
-	const maxId = ordersList.reduce((max, order) => {
-		const numPart = parseInt(order.id.split("-")[1], 10);
-		return Math.max(max, numPart);
-	}, 0);
-	return formatOrderId(maxId + 1);
-}
-
 
 // /* ----------------------------------------------------------------------------------------------
 // 								Customers Management Logic

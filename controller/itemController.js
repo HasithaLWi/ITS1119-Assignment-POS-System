@@ -2,6 +2,7 @@
 import { Item } from "../dto/item.js";
 import { ItemModel } from "../model/itemModel.js";
 import { updateDashboardStats } from "../script.js";
+import { resetOrderForm } from "./orderController.js";
 
 const itemModelInstance = new ItemModel();
 let selectedItemId = null;
@@ -141,6 +142,7 @@ export function resetItemPage() {
 	selectedItemId = null;
 	loadItems();
 	loadItemTable();
+	resetOrderForm();
 }
 
 
@@ -159,6 +161,7 @@ document.addEventListener("click", (event) => {
 			updateDashboardStats();
 			loadItems();
 			loadItemTable();
+			resetOrderForm();
 		}
 	}
 });

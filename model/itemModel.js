@@ -28,7 +28,7 @@ export class ItemModel {
     }
 
     updateItem(updatedItem) {
-        const index = this.items.findIndex(item => item.id === updatedItem.id);
+        const index = itemDB.findIndex(item => item.id === updatedItem.id);
         if (index !== undefined) {
             itemDB[index] = { ...itemDB[index], ...updatedItem };
             alert("Item updated successfully.");

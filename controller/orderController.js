@@ -1,7 +1,31 @@
-import { ordersList, ordersDetailsList, customerDB, itemDB, itemCartList } from "../db/data.js";
-import { generateNewOrderId, updateDashboardStats } from "../script.js";
+import { ordersList, ordersDetailsList, customerDB } from "../db/data.js";
+import { updateDashboardStats } from "../script.js";
 import { loadItems, loadItemTable } from "./itemController.js";
 import { resetOrderHistory, hideOrderUpdateButton } from "./orderHistoryController.js";
+import { OrderModel } from "../model/orderModel.js";
+import { customerModel } from "../model/customerModel.js";
+import { ItemModel } from "../model/itemModel.js";
+import { CartItem } from "../dto/tm/cartItem.js";
+import { Order } from "../dto/order.js";
+import { OrderDetails } from "../dto/orderDetails.js";
+import { showOrderUpdateButton, navigateToOrderFromHistory } from "./orderHistoryController.js";
+
+
+
+const customerModelInstance = new customerModel();
+const itemModelInstance = new ItemModel();
+const orderModelInstance = new OrderModel();
+
+const itemCartList = [];
+
+let discount = 0;
+let paid = 0;
+let balance = 0;
+let totalDisplay = "0";
+let subtotalDisplay = "0";
+
+let customerDataList = customerModelInstance.getAllCustomers();
+let itemDataList = itemModelInstance.getAllItems()
 
 
 
@@ -11,7 +35,7 @@ const itemSelector = document.getElementById("order-item-select");
 function setupDateAndOrderId() {
 
 	// Generate new order ID and set to order form
-	const newOrderId = generateNewOrderId();
+	const newOrderId = orderModelInstance.generateNewOrderId();
 	document.getElementById("order-id-display").value = newOrderId;
 
 	// Set today's date to order form
@@ -23,7 +47,10 @@ function setupDateAndOrderId() {
 }
 
 
-function loadOrderPage() {
+export function loadOrderPage() {
+
+
+
 
 	setupDateAndOrderId();
 
@@ -42,7 +69,8 @@ function loadOrderPage() {
 	optionDefault.textContent = "Select None";
 	customerSelector.appendChild(optionDefault);
 
-	customerDB.forEach(customer => {
+
+	customerDataList.customers.forEach(customer => {
 		const option = document.createElement("option");
 		option.value = customer.id;
 		option.textContent = `${customer.name} (${customer.id})`;
@@ -57,7 +85,7 @@ function loadOrderPage() {
 	itemOptionDefault.textContent = "Select Item";
 	itemSelector.appendChild(itemOptionDefault);
 
-	itemDB.forEach(item => {
+	itemDataList.items.forEach(item => {
 		const option = document.createElement("option");
 		option.value = item.id;
 		option.textContent = `${item.name} (${item.id})`;
@@ -69,24 +97,26 @@ function loadOrderPage() {
 // load cart items
 export function loadCartTable() {
 	const cartTableBody = document.querySelector("#cart-table-body");
+
 	if (!cartTableBody) {
 		return;
 	}
 	cartTableBody.innerHTML = "";
 	itemCartList.forEach((detail, index) => {
-		const item = itemDB.find(i => i.id === detail.itemId);
-		if (item) {
-			const row = document.createElement("tr");
-			row.innerHTML = `
-				<td>${item.id}</td>
-				<td>${item.name}</td>
-				<td>${item.price}</td>
+
+
+		const row = document.createElement("tr");
+		const lineTotal = Number(detail.price) * Number(detail.qty);
+		row.innerHTML = `
+				<td>${detail.itemId}</td>
+				<td>${detail.name}</td>
+				<td>${detail.price}</td>
 				<td>${detail.qty}</td>
-				<td>${item.price * detail.qty}</td>
+				<td>${lineTotal.toFixed(2)}</td>
 				<td><button class="buttons order-buttons btn-delete cart-item-delete-btn" data-index="${index}">-</button></td>	
 			`;
-			cartTableBody.appendChild(row);
-		}
+		cartTableBody.appendChild(row);
+
 	});
 }
 
@@ -99,6 +129,9 @@ function selectCustomerForOrder() {
 	const customerPhoneInput = document.getElementById("order-cust-phone");
 	const customerAddressInput = document.getElementById("order-cust-address");
 
+
+
+
 	const selectedCustomer = document.getElementById("order-customer-select").value;
 	if (selectedCustomer === "") {
 		customerIdInput.value = "----";
@@ -107,7 +140,7 @@ function selectCustomerForOrder() {
 		customerAddressInput.value = "----";
 		return;
 	}
-	const customer = customerDB.find(c => c.id === selectedCustomer);
+	const customer = customerDataList.customers.find(c => c.id === selectedCustomer);
 	if (customer) {
 		customerIdInput.value = customer.id;
 		customerNameInput.value = customer.name;
@@ -128,6 +161,9 @@ function selectItemForOrder() {
 	const itemQtyInput = document.getElementById("order-item-qty-on-hand");
 
 	const selectedItemId = document.getElementById("order-item-select").value;
+
+
+
 	if (selectedItemId === "") {
 		itemIdInput.value = "";
 		itemNameInput.value = "";
@@ -136,7 +172,7 @@ function selectItemForOrder() {
 		return;
 
 	}
-	const item = itemDB.find(i => i.id === selectedItemId);
+	const item = itemDataList.items.find(i => i.id === selectedItemId);
 	if (item) {
 		itemIdInput.value = item.id;
 		itemNameInput.value = item.name;
@@ -170,6 +206,8 @@ export function resetOrderForm() {
 	document.getElementById("balance-label").textContent = "Balance";
 	document.getElementById("balance-label").style.color = "";
 
+	customerDataList = customerModelInstance.getAllCustomers();
+	itemDataList = itemModelInstance.getAllItems();
 	itemCartList.length = 0;
 	loadOrderPage();
 	loadCartTable();
@@ -183,6 +221,8 @@ export function addItemToCart() {
 	const itemId = document.getElementById("order-item-code").value.trim();
 	const qty = Number(document.getElementById("order-item-qty").value);
 	const onHandQty = document.getElementById("order-item-qty-on-hand");
+	const itemName = document.getElementById("order-item-name").value;
+	const itemPrice = document.getElementById("order-item-price").value;
 
 	const isValid = isOrderFormValid();
 	if (!isValid.isValid) {
@@ -191,15 +231,17 @@ export function addItemToCart() {
 	}
 
 	const existingCartItem = itemCartList.find(i => i.itemId === itemId);
+	const total = Number(itemPrice) * qty;
 
 	onHandQty.value -= qty;
 
 	if (existingCartItem) {
 		existingCartItem.qty += qty;
+		existingCartItem.total = Number(existingCartItem.price) * Number(existingCartItem.qty);
 
 
 	} else {
-		itemCartList.push({ itemId, qty });
+		itemCartList.push(new CartItem(itemId, itemName, Number(itemPrice), total, qty));
 	}
 	loadCartTable();
 	calculateOrderTotals();
@@ -210,10 +252,12 @@ function isOrderFormValid() {
 	const qty = Number(document.getElementById("order-item-qty").value);
 	const onHandQty = document.getElementById("order-item-qty-on-hand");
 
+
+
 	if (itemId === "" || Number.isNaN(qty) || qty <= 0) {
 		return { isValid: false, message: "Please select an item and enter a valid quantity." };
 	}
-	const item = itemDB.find(i => i.id === itemId);
+	const item = itemDataList.items.find(i => i.id === itemId);
 	if (!item) {
 		return { isValid: false, message: "Selected item not found." };
 	}
@@ -224,11 +268,7 @@ function isOrderFormValid() {
 }
 
 
-let discount = 0;
-let paid = 0;
-let balance = 0;
-let totalDisplay = "0";
-let subtotalDisplay = "0";
+
 
 export function calculateOrderTotals() {
 	const totalLabel = document.getElementById("order-total-display");
@@ -236,12 +276,18 @@ export function calculateOrderTotals() {
 	const discountPreField = document.getElementById("discount-input");
 	const paidField = document.getElementById("cash-input");
 	const balanceField = document.getElementById("balance-display");
+	const paidAmountLabel = document.getElementById("order-paid-amount");
+	const paidAmountDisplay = document.getElementById("order-paid-display");
 
-
+	let paidAmount = 0;
+	if (paidAmountLabel && paidAmountDisplay && !paidAmountLabel.classList.contains("hidden")) {
+		const parsedPaidAmount = Number(paidAmountDisplay.textContent);
+		paidAmount = Number.isFinite(parsedPaidAmount) ? parsedPaidAmount : 0;
+	}
 
 
 	const total = itemCartList.reduce((sum, cartItem) => {
-		const item = itemDB.find(i => i.id === cartItem.itemId);
+		const item = itemDataList.items.find(i => i.id === cartItem.itemId);
 		return sum + (item ? item.price * cartItem.qty : 0);
 	}, 0);
 
@@ -262,13 +308,13 @@ export function calculateOrderTotals() {
 
 
 	totalDisplay = `${total.toFixed(2)}`;
-	subtotalDisplay = `${(total - discount).toFixed(2)}`;
+	subtotalDisplay = `${(total - discount - paidAmount).toFixed(2)}`;
 	balance = `${(Number(subtotalDisplay) - Number(paid)).toFixed(2)}`;
 
 	totalLabel.textContent = totalDisplay;
 	subtotalLabel.textContent = subtotalDisplay;
 	balanceField.value = balance;
-	setupChangeAndDue();
+	setupChangeAndDue(); // Recalculate change/due based on updated totals and paid amount
 }
 
 const cashInputField = document.getElementById("cash-input");
@@ -285,10 +331,11 @@ if (discountInputField) {
 
 export function placeOrder() {
 
-	const newOrderId = generateNewOrderId();
+	const newOrderId = orderModelInstance.generateNewOrderId();
 	const customerId = document.getElementById("order-cust-id").value.trim();
 	const orderDate = document.getElementById("order-date").value;
 	const discountPreField = document.getElementById("discount-input");
+
 
 	if (itemCartList.length === 0) {
 		alert("Please add at least one item to the cart before placing the order.");
@@ -302,33 +349,20 @@ export function placeOrder() {
 		return;
 	}
 
-	const details = itemCartList.map(cartItem => ({
-		orderId: newOrderId,
-		itemId: cartItem.itemId,
-		qty: cartItem.qty
-	}));
+	const details = itemCartList.map(cartItem => new OrderDetails(
+		newOrderId,
+		cartItem.itemId,
+		cartItem.qty
+	));
 
-	ordersDetailsList.push(...details);
+	const newOrder = new Order(
+		newOrderId, customerId === "" ? null : customerId,
+		orderDate, totalDisplay,
+		discountPreField.value.trim() === "" ? "0" : discountPreField.value,
+		paid,
+		details);
 
-	details.map(detail => {
-		const item = itemDB.find(i => i.id === detail.itemId);
-		if (item) {
-			item.qty -= detail.qty;
-		}
-	});
-
-	const newOrder = {
-		id: newOrderId,
-		customerId: customerId === "" ? null : customerId,
-		date: orderDate,
-		total: totalDisplay,
-		discount: discountPreField.value.trim() === "" ? "0" : discountPreField.value,
-		paid: paid,
-		orderDetails: details
-	};
-
-
-	ordersList.push(newOrder);
+	orderModelInstance.placeOrder(newOrder);
 
 	alert("Order placed successfully!");
 	loadItems();
@@ -344,6 +378,9 @@ export function updateOrder() {
 	const orderDate = document.getElementById("order-date").value;
 	const discountPreField = document.getElementById("discount-input");
 	const paidField = document.getElementById("cash-input");
+	let partialPaidAmount = document.getElementById("order-paid-display").textContent.trim();
+
+
 
 	if (orderId === "") {
 		alert("Please select an order to update.");
@@ -351,6 +388,8 @@ export function updateOrder() {
 	}
 
 	const existingOrder = ordersList.find(order => order.id === orderId);
+	partialPaidAmount = existingOrder ? Number(existingOrder.paid) : 0;
+	
 	if (!existingOrder) {
 		alert("Selected order not found.");
 		return;
@@ -371,20 +410,20 @@ export function updateOrder() {
 
 	// Restore previous stock before checking and applying the updated cart quantities.
 	previousDetails.forEach((detail) => {
-		const item = itemDB.find(i => i.id === detail.itemId);
+		const item = itemDataList.items.find(i => i.id === detail.itemId);
 		if (item) {
 			item.qty += Number(detail.qty);
 		}
 	});
 
 	const exceedsStock = itemCartList.some((cartItem) => {
-		const item = itemDB.find(i => i.id === cartItem.itemId);
+		const item = itemDataList.items.find(i => i.id === cartItem.itemId);
 		return !item || Number(cartItem.qty) > Number(item.qty);
 	});
 
 	if (exceedsStock) {
 		previousDetails.forEach((detail) => {
-			const item = itemDB.find(i => i.id === detail.itemId);
+			const item = itemDataList.items.find(i => i.id === detail.itemId);
 			if (item) {
 				item.qty -= Number(detail.qty);
 			}
@@ -400,7 +439,7 @@ export function updateOrder() {
 	}));
 
 	updatedDetails.forEach((detail) => {
-		const item = itemDB.find(i => i.id === detail.itemId);
+		const item = itemDataList.items.find(i => i.id === detail.itemId);
 		if (item) {
 			item.qty -= detail.qty;
 		}
@@ -417,7 +456,7 @@ export function updateOrder() {
 	existingOrder.date = orderDate;
 	existingOrder.total = totalDisplay;
 	existingOrder.discount = discountPreField.value.trim() === "" ? "0" : discountPreField.value.trim();
-	existingOrder.paid = Number(paidField.value);
+	existingOrder.paid = Number(paidField.value) + Number(partialPaidAmount);
 	existingOrder.orderDetails = updatedDetails;
 
 	alert("Order updated successfully!");
@@ -484,7 +523,7 @@ function setupChangeAndDue() {
 	}
 	if (paidField.value.trim() === "") {
 		balanceField.value = subtotalAmount.toFixed(2);
-	} else if (paidField.value < subtotalAmount) {
+	} else if (paidField.value < subtotalAmount ) {
 		balanceField.value = (subtotalAmount - Number(paidField.value)).toFixed(2);
 		if (balanceLabel) {
 			balanceLabel.textContent = "Due:";
@@ -492,8 +531,8 @@ function setupChangeAndDue() {
 		}
 
 	} else {
-		const paidAmount = Number(paidField.value);
-		const changeDue = paidAmount - subtotalAmount;
+		const paidcashAmount = Number(paidField.value);
+		const changeDue = paidcashAmount - subtotalAmount;
 		balanceField.value = changeDue.toFixed(2);
 		if (balanceLabel) {
 			balanceLabel.textContent = "Change:";
@@ -591,3 +630,40 @@ function hidePaidFieldError() {
 		paidField.style.borderColor = "";
 	}
 }
+
+document.addEventListener("click", (event) => {
+	if (event.target.tagName === "TD" && event.target.parentElement.parentElement.id === "history-table-body") {
+		const cells = event.target.parentElement.children;
+		const orderId = cells[0].textContent.trim();
+		const order = ordersList.find(o => o.id === orderId);
+		if (order) {
+			document.getElementById("order-id-display").value = order.id;
+			document.getElementById("order-date").value = order.date;
+
+			const customer = customerDB.find(c => c.id === order.customerId);
+			document.getElementById("order-cust-id").value = customer ? customer.id : "----";
+			document.getElementById("order-cust-name").value = customer ? customer.name : "Walk-in Customer";
+			document.getElementById("order-cust-phone").value = customer ? customer.phone : "----";
+			document.getElementById("order-cust-address").value = customer ? customer.address : "----";
+			document.getElementById("discount-input").value = order.discount;
+			document.getElementById("cash-input").value = `${(0).toFixed(2)}`;
+			const orderPaidAmount = document.getElementById("order-paid-display");
+			if (orderPaidAmount) {
+				orderPaidAmount.textContent = `${(order.paid).toFixed(2)}`;
+			}
+
+			itemCartList.length = 0;
+			order.orderDetails.forEach(detail => {
+				const item = itemDataList.items.find(i => i.id === detail.itemId);
+				const itemName = item ? item.name : "Unknown Item";
+				const itemPrice = item ? item.price : 0;
+				const total = itemPrice * detail.qty;
+				itemCartList.push(new CartItem(detail.itemId, itemName, itemPrice, total, detail.qty));
+			});
+			loadCartTable();
+			showOrderUpdateButton();
+			calculateOrderTotals();
+			navigateToOrderFromHistory();
+		}
+	}
+});

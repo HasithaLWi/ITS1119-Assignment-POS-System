@@ -1,7 +1,6 @@
 
-import { ordersList, customerDB, itemCartList } from "../db/data.js";
+import { ordersList, customerDB } from "../db/data.js";
 import { navLinks, pages } from "../script.js";
-import { loadCartTable, calculateOrderTotals } from "./orderController.js";
 
 /* ----------------------------------------------------------------------------------------------
 								   Order History Management Logic
@@ -111,37 +110,37 @@ document.querySelectorAll(".filter-by-date").forEach((input) => {
 });
 
 
-document.addEventListener("click", (event) => {
-	if (event.target.tagName === "TD" && event.target.parentElement.parentElement.id === "history-table-body") {
-		const cells = event.target.parentElement.children;
-		const orderId = cells[0].textContent.trim();
-		const order = ordersList.find(o => o.id === orderId);
-		if (order) {
-			document.getElementById("order-id-display").value = order.id;
-			document.getElementById("order-date").value = order.date;
+// document.addEventListener("click", (event) => {
+// 	if (event.target.tagName === "TD" && event.target.parentElement.parentElement.id === "history-table-body") {
+// 		const cells = event.target.parentElement.children;
+// 		const orderId = cells[0].textContent.trim();
+// 		const order = ordersList.find(o => o.id === orderId);
+// 		if (order) {
+// 			document.getElementById("order-id-display").value = order.id;
+// 			document.getElementById("order-date").value = order.date;
 
-			const customer = customerDB.find(c => c.id === order.customerId);
-			document.getElementById("order-cust-id").value = customer ? customer.id : "----";
-			document.getElementById("order-cust-name").value = customer ? customer.name : "Walk-in Customer";
-			document.getElementById("order-cust-phone").value = customer ? customer.phone : "----";
-			document.getElementById("order-cust-address").value = customer ? customer.address : "----";
-			document.getElementById("discount-input").value = order.discount;
-			document.getElementById("cash-input").value = `${(0).toFixed(2)}`;
+// 			const customer = customerDB.find(c => c.id === order.customerId);
+// 			document.getElementById("order-cust-id").value = customer ? customer.id : "----";
+// 			document.getElementById("order-cust-name").value = customer ? customer.name : "Walk-in Customer";
+// 			document.getElementById("order-cust-phone").value = customer ? customer.phone : "----";
+// 			document.getElementById("order-cust-address").value = customer ? customer.address : "----";
+// 			document.getElementById("discount-input").value = order.discount;
+// 			document.getElementById("cash-input").value = `${(0).toFixed(2)}`;
 
-			itemCartList.length = 0;
-			order.orderDetails.forEach(detail => {
-				itemCartList.push({ itemId: detail.itemId, qty: detail.qty });
-			});
-			loadCartTable();
-			calculateOrderTotals();
-			showOrderUpdateButton();
-			navigateToOrderFromHistory();
-		}
-	}
-});
+// 			itemCartList.length = 0;
+// 			order.orderDetails.forEach(detail => {
+// 				itemCartList.push({ itemId: detail.itemId, qty: detail.qty });
+// 			});
+// 			loadCartTable();
+// 			calculateOrderTotals();
+// 			showOrderUpdateButton();
+// 			navigateToOrderFromHistory();
+// 		}
+// 	}
+// });
 
 // navidate to order
-function navigateToOrderFromHistory() {
+export function navigateToOrderFromHistory() {
 	const orderId = document.getElementById("order-id-display").value.trim();
 	if (orderId === "") {
 		alert("Please select an order from the history table first.");
@@ -165,7 +164,7 @@ function navigateToOrderFromHistory() {
 	});
 }
 
-function showOrderUpdateButton() {
+export function showOrderUpdateButton() {
 	const orderUpdateButtons = document.getElementById("order-update-btns");
 	const orderSubmitButtons = document.querySelector(".summary-btns");
 	const orderDueDisplay = document.getElementById("order-paid-amount");
