@@ -1,4 +1,7 @@
 
+import { ordersList, customerDB, itemCartList } from "../db/data.js";
+import { navLinks, pages } from "../script.js";
+import { loadCartTable, calculateOrderTotals } from "./orderController.js";
 
 /* ----------------------------------------------------------------------------------------------
 								   Order History Management Logic
@@ -36,7 +39,7 @@ function loadOrderHistory(orders = ordersList) {
 	});
 }
 
-function resetOrderHistory() {
+export function resetOrderHistory() {
 	const searchInput = document.getElementById("history-search");
 	const startDateInput = document.getElementById("start-date");
 	const endDateInput = document.getElementById("end-date");
@@ -174,7 +177,7 @@ function showOrderUpdateButton() {
 	}
 }
 
-function hideOrderUpdateButton() {
+export function hideOrderUpdateButton() {
 	const orderUpdateButtons = document.getElementById("order-update-btns");
 	const orderSubmitButtons = document.querySelector(".summary-btns");
 	const orderDueDisplay = document.getElementById("order-paid-amount");

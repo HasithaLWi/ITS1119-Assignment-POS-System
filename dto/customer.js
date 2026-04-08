@@ -1,4 +1,4 @@
-class Customer {
+export class Customer {
     constructor(id, name, phone, address) {
         this.id = id;
         this.name = name;

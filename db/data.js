@@ -1,4 +1,8 @@
-const customerDB = [
+import { Customer } from "../dto/customer.js";
+import { Item } from "../dto/item.js";
+
+
+export const customerDB = [
 	new Customer("CUS-001", "Customer one", "0709876543", "Galle"),
 	new Customer("CUS-002", "Customer two", "0712345678", "Colombo"),
 	new Customer("CUS-003", "Customer three", "0779876543", "Kandy"),
@@ -6,7 +10,7 @@ const customerDB = [
 	new Customer("CUS-005", "Customer five", "0765432198", "Matara")
 ];
 
-const itemDB = [
+export const itemDB = [
 	new Item("ITM-001", "Item one", 500, 10),
 	new Item("ITM-002", "Item two", 1000, 5),
 	new Item("ITM-003", "Item three", 750, 8),
@@ -14,7 +18,7 @@ const itemDB = [
 	new Item("ITM-005", "Item five", 300, 15)
 ];
 
-const ordersDetailsList = [
+export const ordersDetailsList = [
 	{ orderId: "ORD-001", itemId: "ITM-001", qty: 2 },
 	{ orderId: "ORD-002", itemId: "ITM-002", qty: 1 },
 	{ orderId: "ORD-002", itemId: "ITM-003", qty: 3 },
@@ -24,7 +28,7 @@ const ordersDetailsList = [
 	{ orderId: "ORD-005", itemId: "ITM-003", qty: 5 }
 ];
 
-const ordersList = [
+export const ordersList = [
 	{ id: "ORD-001", customerId: "CUS-001", date: "2024-06-01", total: 10000, discount: 12, paid: 8800, orderDetails: [] },
 	{ id: "ORD-002", customerId: "CUS-002", date: "2024-06-02", total: 5000, discount: 15, paid: 4250, orderDetails: [] },
 	{ id: "ORD-003", customerId: "CUS-003", date: "2024-06-03", total: 15000, discount: 0, paid: 15000, orderDetails: [] },
@@ -32,7 +36,7 @@ const ordersList = [
 	{ id: "ORD-005", customerId: "CUS-005", date: "2024-06-05", total: 8500, discount: 10, paid: 7650, orderDetails: [] }
 ];
 
-const itemCartList = [
+export const itemCartList = [
 	{ itemId: "ITM-001", qty: 2 },
 	{ itemId: "ITM-003", qty: 1 }
 ];

@@ -1,3 +1,6 @@
+import { Customer } from "../dto/customer.js";
+import { customerModel } from "../model/customerModel.js";
+import { updateDashboardStats } from "../script.js";
 
 const customerModelInstance = new customerModel();
 let customerDataList = [];
@@ -36,7 +39,7 @@ function loadCustomerTable(customerData = customerDataList) {
 }
 
 // Save Customer
-function saveCustomer() {
+export function saveCustomer() {
 	const nameInput = document.getElementById("cust-name-input");
 	const phoneInput = document.getElementById("cust-phone-input");
 	const addressInput = document.getElementById("cust-address-input");
@@ -85,7 +88,7 @@ document.addEventListener("click", (event) => {
 });
 
 // Update Customer
-function updateCustomer() {
+export function updateCustomer() {
 	const idInput = document.getElementById("cust-id-input");
 	const nameInput = document.getElementById("cust-name-input");
 	const phoneInput = document.getElementById("cust-phone-input");
@@ -150,7 +153,7 @@ document.getElementById("customer-search").addEventListener("input", function ()
 });
 
 // Validate Customer Form
-function isCustomerFormValid(skipDuplicateCheck = false) {
+export function isCustomerFormValid(skipDuplicateCheck = false) {
 	const nameInput = document.getElementById("cust-name-input");
 	const phoneInput = document.getElementById("cust-phone-input");
 	const addressInput = document.getElementById("cust-address-input");
@@ -183,7 +186,7 @@ function isCustomerFormValid(skipDuplicateCheck = false) {
 }
 
 // Reset Customer Form
-function resetCustomerpage() {
+export function resetCustomerpage() {
 	document.getElementById("cust-id-input").value = "";
 	document.getElementById("cust-name-input").value = "";
 	document.getElementById("cust-phone-input").value = "";

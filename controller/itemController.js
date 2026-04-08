@@ -1,18 +1,22 @@
 
+import { Item } from "../dto/item.js";
+import { ItemModel } from "../model/itemModel.js";
+import { updateDashboardStats } from "../script.js";
+
 const itemModelInstance = new ItemModel();
 let selectedItemId = null;
 let itemsDataList = [];
 
 
 
-function loadItems() {
+export function loadItems() {
 	itemsDataList = itemModelInstance.getAllItems().items;
 	if (itemModelInstance.getAllItems().isEmpty) {
 		itemsDataList = [];
 	}
 }
 
-function loadItemTable(items = itemsDataList) {
+export function loadItemTable(items = itemsDataList) {
 	const itemsTableBody = document.querySelector("#items-table-body");
 	if (!itemsTableBody) {
 		return;
@@ -74,7 +78,7 @@ function isItemFormValid() {
 }
 
 // Save Item
-function saveItem() {
+export function saveItem() {
 	const validation = isItemFormValid();
 	if (!validation.isValid) {
 		alert(validation.message);
@@ -93,7 +97,7 @@ function saveItem() {
 }
 
 // Update Item
-function updateItem() {
+export function updateItem() {
 	const itemCodeInput = document.getElementById("item-code-input");
 	const itemNameInput = document.getElementById("item-name-input");
 	const itemPriceInput = document.getElementById("item-price-input");
@@ -128,7 +132,7 @@ function updateItem() {
 }
 
 // Reset Item Form
-function resetItemPage() {
+export function resetItemPage() {
 	document.getElementById("item-code-input").value = "";
 	document.getElementById("item-name-input").value = "";
 	document.getElementById("item-price-input").value = "";

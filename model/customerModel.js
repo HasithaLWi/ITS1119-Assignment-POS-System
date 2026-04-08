@@ -1,6 +1,7 @@
 
+import { customerDB, ordersList } from "../db/data.js";
 
-class customerModel {
+export class customerModel {
 
     // Fetch Customers from Local Storage
     getAllCustomers() {

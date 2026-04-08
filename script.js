@@ -1,12 +1,31 @@
 const THEME_KEY = "pos-theme";
 const ACCENT_KEY = "pos-accent";
 
+import { customerDB, itemDB, ordersList } from "./db/data.js";
+import { saveCustomer, updateCustomer, resetCustomerpage } from "./controller/customerController.js";
+import { saveItem, updateItem, resetItemPage } from "./controller/itemController.js";
+import { addItemToCart, placeOrder, updateOrder, resetOrderForm } from "./controller/orderController.js";
+import { resetOrderHistory } from "./controller/orderHistoryController.js";
+
+window.saveCustomer = saveCustomer; 
+window.updateCustomer = updateCustomer;
+window.resetCustomerpage = resetCustomerpage;
+window.saveItem = saveItem;
+window.updateItem = updateItem;
+window.resetItemPage = resetItemPage;
+window.addItemToCart = addItemToCart;
+window.resetOrderForm = resetOrderForm;
+window.placeOrder = placeOrder;
+window.updateOrder = updateOrder;
+window.resetOrderHistory = resetOrderHistory;
+
+
 
 function applyAccent(accentColor) {
 	document.body.style.setProperty("--accent", accentColor);
 }
 
-function initAccentPicker() {
+export function initAccentPicker() {
 	const accentPicker = document.getElementById("accent-picker");
 	const colorCircle = document.getElementById("color-theme-circle");
 	const accentPalette = document.getElementById("accent-palette");
@@ -59,7 +78,7 @@ function initAccentPicker() {
 	});
 }
 
-function applyTheme(theme, button) {
+export function applyTheme(theme, button) {
 	const isLight = theme === "light";
 	document.body.classList.toggle("light-mode", isLight);
 
@@ -143,8 +162,8 @@ loginBtn.addEventListener("click", (event) => {
 });
 
 // --- Navigation Logic ---
-const navLinks = document.querySelectorAll('.nav-link');
-const pages = document.querySelectorAll('.content-section');
+export const navLinks = document.querySelectorAll('.nav-link');
+export const pages = document.querySelectorAll('.content-section');
 
 navLinks.forEach(link => {
 	link.addEventListener('click', (e) => {
@@ -167,7 +186,7 @@ navLinks.forEach(link => {
 
 
 
-function updateDashboardStats() {
+export function updateDashboardStats() {
 	const statCustomers = document.getElementById('stat-customers-count');
 	const statItems = document.getElementById('stat-items-count');
 	const statRevenue = document.getElementById('stat-revenue');
@@ -196,11 +215,11 @@ function updateDashboardStats() {
 }
 
 
-function formatOrderId(id) {
+export function formatOrderId(id) {
 	return `ORD-${String(id).padStart(3, "0")}`;
 }
 
-function generateNewOrderId() {
+export function generateNewOrderId() {
 	const maxId = ordersList.reduce((max, order) => {
 		const numPart = parseInt(order.id.split("-")[1], 10);
 		return Math.max(max, numPart);

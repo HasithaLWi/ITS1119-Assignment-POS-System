@@ -1,3 +1,8 @@
+import { ordersList, ordersDetailsList, customerDB, itemDB, itemCartList } from "../db/data.js";
+import { generateNewOrderId, updateDashboardStats } from "../script.js";
+import { loadItems, loadItemTable } from "./itemController.js";
+import { resetOrderHistory, hideOrderUpdateButton } from "./orderHistoryController.js";
+
 
 
 const customerSelector = document.getElementById("order-customer-select");
@@ -62,7 +67,7 @@ function loadOrderPage() {
 
 
 // load cart items
-function loadCartTable() {
+export function loadCartTable() {
 	const cartTableBody = document.querySelector("#cart-table-body");
 	if (!cartTableBody) {
 		return;
@@ -143,7 +148,7 @@ function selectItemForOrder() {
 }
 
 // reset order form
-function resetOrderForm() {
+export function resetOrderForm() {
 	document.getElementById("order-id-display").value = "";
 	document.getElementById("order-date").value = "";
 	document.getElementById("order-cust-id").value = "";
@@ -174,7 +179,7 @@ function resetOrderForm() {
 	hideOrderUpdateButton();
 }
 
-function addItemToCart() {
+export function addItemToCart() {
 	const itemId = document.getElementById("order-item-code").value.trim();
 	const qty = Number(document.getElementById("order-item-qty").value);
 	const onHandQty = document.getElementById("order-item-qty-on-hand");
@@ -225,7 +230,7 @@ let balance = 0;
 let totalDisplay = "0";
 let subtotalDisplay = "0";
 
-function calculateOrderTotals() {
+export function calculateOrderTotals() {
 	const totalLabel = document.getElementById("order-total-display");
 	const subtotalLabel = document.getElementById("order-subtotal-display");
 	const discountPreField = document.getElementById("discount-input");
@@ -278,7 +283,7 @@ if (discountInputField) {
 
 
 
-function placeOrder() {
+export function placeOrder() {
 
 	const newOrderId = generateNewOrderId();
 	const customerId = document.getElementById("order-cust-id").value.trim();
@@ -333,7 +338,7 @@ function placeOrder() {
 	resetOrderHistory();
 }
 
-function updateOrder() {
+export function updateOrder() {
 	const orderId = document.getElementById("order-id-display").value.trim();
 	const customerIdFieldValue = document.getElementById("order-cust-id").value.trim();
 	const orderDate = document.getElementById("order-date").value;

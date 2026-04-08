@@ -1,4 +1,4 @@
-class OrderDto {
+export class OrderDto {
     constructor(id, customerId, date, total, discount, paid) {
         this.id = id;
         this.customerId = customerId;

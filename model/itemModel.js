@@ -1,4 +1,6 @@
-class ItemModel {
+import { itemDB, ordersDetailsList } from "../db/data.js";
+
+export class ItemModel {
 
 
     getAllItems() {
