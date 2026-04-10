@@ -6,7 +6,7 @@ export class OrderModel {
         if (ordersList.length === 0) {
             return { isEmpty: true, orders: [] };
         } else {
-            return { isEmpty: false, orders: ordersList };
+            return { isEmpty: false, orders: [...ordersList] };
         }
     }
 

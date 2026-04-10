@@ -1,16 +1,20 @@
-
-import { ordersList, customerDB } from "../db/data.js";
 import { navLinks, pages } from "../script.js";
+import { OrderModel } from "../model/orderModel.js";
+import { customerModel } from "../model/customerModel.js";
 
-/* ----------------------------------------------------------------------------------------------
-								   Order History Management Logic
-   ----------------------------------------------------------------------------------------------*/
+const orderModelInstance = new OrderModel();
+const customerModelInstance = new customerModel();
+
+let customerDataList = customerModelInstance.getAllCustomers().customers;
+let orderHistoryDataList = orderModelInstance.getAllOrders().orders;
+
+
 const historyFilteredOrders = [];
-if(historyFilteredOrders.length === 0){
-	historyFilteredOrders.push(...ordersList);
+if (historyFilteredOrders.length === 0) {
+	historyFilteredOrders.push(...orderHistoryDataList);
 }
 
-function loadOrderHistory(orders = ordersList) {
+function loadOrderHistory(orders = orderHistoryDataList) {
 	const historyTableBody = document.querySelector("#history-table-body");
 	if (!historyTableBody) {
 		return;
@@ -21,7 +25,7 @@ function loadOrderHistory(orders = ordersList) {
 	}
 	historyTableBody.innerHTML = "";
 	orders.forEach((order) => {
-		const customer = customerDB.find(c => c.id === order.customerId);
+		const customer = customerDataList.find(c => c.id === order.customerId);
 		const discountAmount = Number(order.discount) ? (Number(order.total) * (Number(order.discount) / 100)) : 0;
 		const subtotal = Number(order.total) - discountAmount;
 		const row = document.createElement("tr");
@@ -45,7 +49,7 @@ export function resetOrderHistory() {
 
 	if (startDateInput) {
 		startDateInput.value = "";
-	}	
+	}
 	if (endDateInput) {
 		const today = new Date();
 		endDateInput.value = today.toISOString().split("T")[0];
@@ -54,9 +58,13 @@ export function resetOrderHistory() {
 		searchInput.value = "";
 	}
 	historyFilteredOrders.length = 0;
-	historyFilteredOrders.push(...ordersList);
+	historyFilteredOrders.push(...orderHistoryDataList);
+
+
+	customerDataList = customerModelInstance.getAllCustomers().customers;
+	orderHistoryDataList = orderModelInstance.getAllOrders().orders;
 	loadOrderHistory();
-	
+
 }
 
 // Search Orders in History
@@ -68,7 +76,7 @@ document.getElementById("history-search").addEventListener("input", function () 
 		return;
 	}
 	const filtered = historyFilteredOrders.filter(order => {
-		const customer = customerDB.find(c => c.id === order.customerId);
+		const customer = customerDataList.find(c => c.id === order.customerId);
 		const customerName = customer ? customer.name.toLowerCase() : "walk-in customer";
 		return (
 			order.id.toLowerCase().includes(query) ||
@@ -95,7 +103,7 @@ document.querySelectorAll(".filter-by-date").forEach((input) => {
 			return;
 		}
 
-		const filtered = ordersList.filter((order) => {
+		const filtered = orderHistoryDataList.filter((order) => {
 			const orderDate = String(order.date || "");
 			return (!startDate || orderDate >= startDate) && (!endDate || orderDate <= endDate);
 		});
@@ -110,35 +118,6 @@ document.querySelectorAll(".filter-by-date").forEach((input) => {
 });
 
 
-// document.addEventListener("click", (event) => {
-// 	if (event.target.tagName === "TD" && event.target.parentElement.parentElement.id === "history-table-body") {
-// 		const cells = event.target.parentElement.children;
-// 		const orderId = cells[0].textContent.trim();
-// 		const order = ordersList.find(o => o.id === orderId);
-// 		if (order) {
-// 			document.getElementById("order-id-display").value = order.id;
-// 			document.getElementById("order-date").value = order.date;
-
-// 			const customer = customerDB.find(c => c.id === order.customerId);
-// 			document.getElementById("order-cust-id").value = customer ? customer.id : "----";
-// 			document.getElementById("order-cust-name").value = customer ? customer.name : "Walk-in Customer";
-// 			document.getElementById("order-cust-phone").value = customer ? customer.phone : "----";
-// 			document.getElementById("order-cust-address").value = customer ? customer.address : "----";
-// 			document.getElementById("discount-input").value = order.discount;
-// 			document.getElementById("cash-input").value = `${(0).toFixed(2)}`;
-
-// 			itemCartList.length = 0;
-// 			order.orderDetails.forEach(detail => {
-// 				itemCartList.push({ itemId: detail.itemId, qty: detail.qty });
-// 			});
-// 			loadCartTable();
-// 			calculateOrderTotals();
-// 			showOrderUpdateButton();
-// 			navigateToOrderFromHistory();
-// 		}
-// 	}
-// });
-
 // navidate to order
 export function navigateToOrderFromHistory() {
 	const orderId = document.getElementById("order-id-display").value.trim();
@@ -146,7 +125,7 @@ export function navigateToOrderFromHistory() {
 		alert("Please select an order from the history table first.");
 		return;
 	}
-	const order = ordersList.find(o => o.id === orderId);
+	const order = orderHistoryDataList.find(o => o.id === orderId);
 	if (!order) {
 		alert("Selected order not found.");
 		return;

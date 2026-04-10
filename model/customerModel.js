@@ -10,7 +10,7 @@ export class customerModel {
 
             return { isEmpty: true, customers: [] };
         } else {
-            return { isEmpty: false, customers: customerDB };
+            return { isEmpty: false, customers: [...customerDB] };
         }
     }
 

@@ -7,7 +7,7 @@ export class ItemModel {
         if (itemDB.length === 0) {
             return { isEmpty: true, items: [] };
         } else {
-            return { isEmpty: false, items: itemDB };
+            return { isEmpty: false, items: [...itemDB] };
         }
     }
 
