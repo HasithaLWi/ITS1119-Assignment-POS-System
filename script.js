@@ -123,45 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	resetDashboard();
 });
 
-
-// // --- Authentication Logic ---
-
-// let username = "admin";
-// let password = "admin123";
-
-// const loginBtn = document.getElementById("login-btn");
-// loginBtn.addEventListener("click", (event) => {
-// 	event.preventDefault();
-// 	const username = document.getElementById("username").value.trim();
-// 	const password = document.getElementById("password").value.trim();
-
-// 	if (username === "") {
-// 		alert("Please enter a username.");
-// 		return;
-// 	} else if (username !== "admin") {
-// 		alert("Invalid username. Please try again.");
-// 		return;
-// 	}
-
-// 	if (password === "") {
-// 		alert("Please enter a password.");
-// 		return;
-// 	} else if (password !== "admin123") {
-// 		alert("Invalid password. Please try again.");
-// 		return;
-// 	}
-
-// 	document.getElementById("welcome-message").textContent = `Welcome, ${username}!`;
-// 	document.getElementById("login").classList.add("hidden");
-// 	document.getElementById("main-app").classList.remove("hidden");
-
-// 	resetCustomerpage();
-// 	resetItemPage();
-// 	resetOrderForm();
-// 	resetOrderHistory();
-
-// });
-
 // --- Navigation Logic ---
 export const navLinks = document.querySelectorAll('.nav-link');
 export const pages = document.querySelectorAll('.content-section');
