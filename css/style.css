@@ -2,18 +2,19 @@
    1. BASE VARIABLES & RESETS
    ========================================================= */
 :root {
-    --bg-main: #1c1d2b;       /* Dark background */
-    --bg-card: #20263f;       /* Slightly lighter blue for cards */
-    --accent: #f04b66;        /* Pinkish red accent */
-    --text-main: #ffffff;     /* Primary text */
-    --text-muted: #a1a1aa;    /* Secondary/Muted text */
-    --header-bg: #1c1d2b;     /* Header background */
-    /* --input-bg: #162b4d;      Deep blue for input fields */
-    --input-bg: #2a314d;
+    --bg-main: #eef3ff;
+    --bg-card: #ffffff;
+    --accent: #d84c6f;
+    --newAccent: #FF8C00;
+    --newAccent2: #FFD54F;
 
-    --btn-blue: #3498db;      /* Add to cart blue */
-    --btn-green: #2ecc71;     /* Purchase green */
-    --btn-orange: #ffab24;    /* Reset / Subtotal orange */
+    --text-main: #1d2333;
+    --text-muted: #55607a;
+    --header-bg: #ffffff;
+    --input-bg: #e8efff;
+    --btn-blue: #2f78d9;
+    --btn-green: #2f9f66;
+    --btn-orange: #db8c13;
 }
 
 body.light-mode {
