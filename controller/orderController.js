@@ -113,7 +113,7 @@ export function loadCartTable() {
 				<td>${detail.price}</td>
 				<td>${detail.qty}</td>
 				<td>${lineTotal.toFixed(2)}</td>
-				<td><button class="buttons order-buttons btn-delete cart-item-delete-btn" data-index="${index}">-</button></td>	
+				<td><button class="buttons btn btn-outline-danger" data-index="${index}">-</button></td>	
 			`;
 		cartTableBody.appendChild(row);
 
@@ -261,7 +261,7 @@ function removeItemFromCart(index) {
 	const cartItem = itemCartList[index];
 	const onHandQtyInput = document.getElementById("order-item-qty-on-hand");
 	if (cartItem && onHandQtyInput) {
-		if(cartItem.qty > 1) {
+		if (cartItem.qty > 1) {
 			cartItem.qty -= 1;
 			cartItem.total = Number(cartItem.price) * Number(cartItem.qty);
 		} else {
@@ -416,7 +416,7 @@ export function updateOrder() {
 
 	const existingOrder = ordersList.find(order => order.id === orderId);
 	partialPaidAmount = existingOrder ? Number(existingOrder.paid) : 0;
-	
+
 	if (!existingOrder) {
 		alert("Selected order not found.");
 		return;
@@ -432,7 +432,7 @@ export function updateOrder() {
 		alert(validation.message);
 		return;
 	}
-	
+
 
 	const updatedDetails = itemCartList.map((cartItem) => new OrderDetails(
 		orderId,
@@ -441,9 +441,9 @@ export function updateOrder() {
 	));
 
 	const updatedOrder = new Order(
-		orderId, 
+		orderId,
 		customerIdFieldValue === "" ? null : customerIdFieldValue,
-		orderDate, 
+		orderDate,
 		totalDisplay,
 		discountPreField.value.trim() === "" ? "0" : discountPreField.value,
 		Number(paidField.value) + Number(partialPaidAmount),
@@ -516,7 +516,7 @@ function setupChangeAndDue() {
 	}
 	if (paidField.value.trim() === "") {
 		balanceField.value = subtotalAmount.toFixed(2);
-	} else if (paidField.value < subtotalAmount ) {
+	} else if (paidField.value < subtotalAmount) {
 		balanceField.value = (subtotalAmount - Number(paidField.value)).toFixed(2);
 		if (balanceLabel) {
 			balanceLabel.textContent = "Due:";

@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -134,11 +136,11 @@
                             <div class="form-card-field">
                                 <div class="input-box">
                                     <label class="input-field-labels">Order ID:</label>
-                                    <input type="text" id="order-id-display" readonly>
+                                    <input class="input-field" type="text" id="order-id-display" readonly>
                                 </div>
                                 <div class="input-box">
                                     <label class="input-field-labels">Date:</label>
-                                    <input type="date" id="order-date" readonly>
+                                    <input class="input-field" type="date" id="order-date" readonly>
                                 </div>
                                 <div class="comb-box">
                                     <label class="input-field-labels">Customer :</label>
@@ -148,19 +150,19 @@
                                 </div>
                                 <div class="input-box">
                                     <label class="input-field-labels">Customer ID:</label>
-                                    <input type="text" id="order-cust-id" readonly>
+                                    <input class="input-field" type="text" id="order-cust-id" readonly>
                                 </div>
                                 <div class="input-box">
                                     <label class="input-field-labels">Name:</label>
-                                    <input type="text" id="order-cust-name" readonly>
+                                    <input class="input-field" type="text" id="order-cust-name" readonly>
                                 </div>
                                 <div class="input-box">
                                     <label class="input-field-labels">Phone:</label>
-                                    <input type="text" id="order-cust-phone" readonly>
+                                    <input class="input-field" type="text" id="order-cust-phone" readonly>
                                 </div>
                                 <div class="input-box full-width">
                                     <label class="input-field-labels">Address:</label>
-                                    <input type="text" id="order-cust-address" readonly>
+                                    <input class="input-field" type="text" id="order-cust-address" readonly>
                                 </div>
                             </div>
                         </div>
@@ -193,33 +195,32 @@
                             <div class="form-card-field">
                                 <div class="comb-box">
                                     <label class="input-field-labels">Item:</label>
-                                    <select id="order-item-select">
+                                    <select class="comb-field" id="order-item-select">
                                         <option value="">Item</option>
                                     </select>
                                 </div>
                                 <div class="input-box">
                                     <label class="input-field-labels">Item CODE:</label>
-                                    <input type="text" id="order-item-code" readonly>
+                                    <input class="input-field" type="text" id="order-item-code" readonly>
                                 </div>
                                 <div class="input-box">
                                     <label class="input-field-labels">Item Name:</label>
-                                    <input type="text" id="order-item-name" readonly>
+                                    <input class="input-field" type="text" id="order-item-name" readonly>
                                 </div>
                                 <div class="input-box">
                                     <label class="input-field-labels">Price:</label>
-                                    <input type="text" id="order-item-price" readonly>
+                                    <input class="input-field" type="text" id="order-item-price" readonly>
                                 </div>
                                 <div class="input-box qty-order">
                                     <label class="input-field-labels">Order Quantity:</label>
-                                    <input type="number" id="order-item-qty" min="1" value="1">
+                                    <input class="input-field" type="number" id="order-item-qty" min="1" value="1">
                                 </div>
                                 <div class="input-box qty-on-hand">
                                     <label class="input-field-labels">QTYonH:</label>
-                                    <input type="text" id="order-item-qty-on-hand" readonly>
+                                    <input class="input-field" type="text" id="order-item-qty-on-hand" readonly>
                                 </div>
-                                <button class="buttons order-buttons add-to-cart-btn" id="add-to-cart"
-                                    onclick="addItemToCart()">Add To
-                                    Cart</button>
+                                <button type="button" class="buttons btn btn-outline-primary" id="add-to-cart"
+                                    onclick="addItemToCart()">Add To Cart</button>
 
                             </div>
                         </div>
@@ -233,32 +234,32 @@
                             <div class="order-summary-fields">
                                 <div class="input-box" id="cash-box">
                                     <label class="input-field-labels">Cash:</label>
-                                    <input type="number" id="cash-input" min="0" step="0.01">
+                                    <input class="input-field" type="number" id="cash-input" min="0" step="0.01">
                                     <label for="cash-input" class="input-field-labels error-label hidden"
                                         id="cash-error-label"></label>
                                 </div>
                                 <div class="input-box " id="discount-box">
                                     <label class="input-field-labels">Discount:</label>
-                                    <input type="text" id="discount-input" value="0">
+                                    <input class="input-field" type="text" id="discount-input" value="0">
                                     <label for="discount-input" class="input-field-labels error-label hidden"
                                         id="discount-error-label"></label>
                                 </div>
                                 <div class="input-box full-width">
                                     <label class="input-field-labels" id="balance-label">Balance:</label>
-                                    <input type="text" id="balance-display" readonly>
+                                    <input class="input-field" type="text" id="balance-display" readonly>
                                 </div>
                             </div>
                             <div class="summary-btns">
-                                <button class="buttons order-buttons btn-reset" id="order-reset"
+                                <button class="buttons btn btn-outline-warning" id="order-reset"
                                     onclick="resetOrderForm()">Reset</button>
-                                <button class="buttons order-buttons btn-purchase" id="purchase-order"
+                                <button class="buttons btn btn-outline-success" id="purchase-order"
                                     onclick="placeOrder()">Purchase
                                     Order</button>
                             </div>
                             <div class="order-update-btns hidden" id="order-update-btns">
-                                <button class="buttons order-buttons btn-delete" id="order-cancel"
+                                <button class="buttons btn btn-outline-danger" id="order-cancel"
                                     onclick="resetOrderForm()">Cancel</button>
-                                <button class="buttons order-buttons btn-update" id="update-order"
+                                <button class="buttons btn btn-outline-primary" id="update-order"
                                     onclick="updateOrder()">Update Order</button>
                             </div>
                         </div>
@@ -274,17 +275,19 @@
                     <div class="manage-header">
                         <div class="manage-box item-manage-box">
                             <div class="form-inline item-form-inline">
-                                <input type="text" id="item-code-input" placeholder="Item Code" readonly>
-                                <input type="text" id="item-name-input" placeholder="Item Name" class="wide-input">
-                                <input type="number" id="item-price-input" placeholder="Price">
-                                <input type="number" id="item-qty-input" placeholder="Stock Qty">
+                                <input class="input-field" type="text" id="item-code-input" placeholder="Item Code"
+                                    readonly>
+                                <input class="input-field" type="text" id="item-name-input" placeholder="Item Name"
+                                    class="wide-input">
+                                <input class="input-field" type="number" id="item-price-input" placeholder="Price">
+                                <input class="input-field" type="number" id="item-qty-input" placeholder="Stock Qty">
                             </div>
                             <div class="manage-buttons item-manage-buttons">
-                                <button class="buttons item-buttons btn-save" id="save-item"
+                                <button class="buttons btn btn-outline-success" id="save-item"
                                     onclick="saveItem()">Save</button>
-                                <button class="buttons item-buttons btn-update" id="update-item"
+                                <button class="buttons btn btn-outline-primary" id="update-item"
                                     onclick="updateItem()">Update</button>
-                                <button class="buttons item-buttons btn-reset" id="reset-item"
+                                <button class="buttons btn btn-outline-warning" id="reset-item"
                                     onclick="resetItemPage()">Reset</button>
                             </div>
                         </div>
@@ -324,17 +327,18 @@
                     <div class="manage-header">
                         <div class="manage-box customer-manage-box">
                             <div class="form-inline customer-form-inline">
-                                <input type="text" id="cust-id-input" placeholder="Customer ID" readonly>
-                                <input type="text" id="cust-name-input" placeholder="Customer Name">
-                                <input type="text" id="cust-phone-input" placeholder="Phone">
-                                <input type="text" id="cust-address-input" placeholder="Address">
+                                <input class="input-field" type="text" id="cust-id-input" placeholder="Customer ID"
+                                    readonly>
+                                <input class="input-field" type="text" id="cust-name-input" placeholder="Customer Name">
+                                <input class="input-field" type="text" id="cust-phone-input" placeholder="Phone">
+                                <input class="input-field" type="text" id="cust-address-input" placeholder="Address">
                             </div>
                             <div class="manage-buttons customer-manage-buttons">
-                                <button class="buttons customer-buttons btn-save" id="save-customer"
+                                <button class="buttons btn btn-outline-success" id="save-customer"
                                     onclick="saveCustomer()">Save</button>
-                                <button class="buttons customer-buttons btn-update" id="update-customer"
+                                <button class="buttons btn btn-outline-primary" id="update-customer"
                                     onclick="updateCustomer()">Update</button>
-                                <button class="buttons customer-buttons btn-reset" id="reset-customer"
+                                <button class="buttons btn btn-outline-warning" id="reset-customer"
                                     onclick="resetCustomerpage()">Reset</button>
                             </div>
                         </div>
@@ -370,17 +374,17 @@
 
                 <div class="history-main-container">
                     <div class="manage-header align-center">
-                        <button class="buttons history-buttons btn-reset" id="history-reset"
+                        <button class="buttons btn btn-outline-warning" id="history-reset"
                             onclick="resetOrderHistory()">Reset</button>
 
                         <div class="search-box history-search-box">
                             <div class="search-by-date">
-                                <label for="start-date" class="input-field-labels">Start Date:</label>
-                                <input type="date" id="start-date" class="filter-by-date">
-                                <label for="end-date" class="input-field-labels">End Date:</label>
-                                <input type="date" id="end-date" class="filter-by-date">
+                                <label class="input-date-field-labels" for="start-date">Start Date:</label>
+                                <input class="input-date-field" type="date" id="start-date" class="filter-by-date">
+                                <label class="input-date-field-labels" for="end-date">End Date:</label>
+                                <input class="input-date-field" type="date" id="end-date" class="filter-by-date">
                             </div>
-                            <input type="text" placeholder="Search ..." id="history-search">
+                            <input class="input-field" type="text" placeholder="Search ..." id="history-search">
                         </div>
                     </div>
 
@@ -441,6 +445,8 @@
             style="width: 100%; height: 100%; border: none; background: transparent;"></iframe>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

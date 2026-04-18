@@ -37,7 +37,7 @@ export function loadItemTable(items = itemsDataList) {
 			<td>${item.name}</td>
 			<td>${item.price}</td>
 			<td>${item.qty}</td>
-			<td><button class="buttons item-buttons btn-delete item-delete-btn" data-index="${index}">Delete</button></td>
+			<td><button class="buttons btn btn-outline-danger item-delete-btn" data-index="${index}">Delete</button></td>
 		`;
 		itemsTableBody.appendChild(row);
 	});
@@ -122,9 +122,9 @@ export function updateItem() {
 	}
 
 	itemModelInstance.updateItem(new Item(
-		selectedItemId, 
-		itemNameInput.value.trim(), 
-		Number(itemPriceInput.value), 
+		selectedItemId,
+		itemNameInput.value.trim(),
+		Number(itemPriceInput.value),
 		Number(itemQtyInput.value)
 	));
 

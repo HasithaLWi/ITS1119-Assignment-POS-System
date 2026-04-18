@@ -31,7 +31,7 @@ function loadCustomerTable(customerData = customerDataList) {
 				<td>${customer.name}</td>
 				<td>${customer.phone}</td>
 				<td>${customer.address}</td>
-				<td><button class="buttons customer-buttons btn-delete customer-delete-btn" data-index="${index}">Delete</button>
+				<td><button class="buttons btn btn-outline-danger customer-delete-btn" data-index="${index}">Delete</button>
 				</td>
 			`);
 			customersTableBody.append($row);
@@ -62,7 +62,7 @@ export function saveCustomer() {
 
 	resetDashboard();
 	resetCustomerpage();
-	
+
 }
 
 // Delete Customer
