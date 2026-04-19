@@ -669,6 +669,7 @@ tbody tr:hover {
     border-radius: 6px;
     flex: 1;
     max-width: 700px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .form-inline {
@@ -677,11 +678,12 @@ tbody tr:hover {
     gap: 15px;
 }
 
-#cust-name-input {
+.cust-name-input-group,
+.item-name-input-group {
     grid-column: span 2;
 }
 
-#cust-address-input {
+.cust-address-input-group {
     grid-column: span 3;
 }
 
@@ -701,8 +703,17 @@ tbody tr:hover {
 
 .item-search-box input,
 .customer-search-box input {
-    flex: 0 0 250px;
     width: 100%;
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.item-search-box,
+.customer-search-box {
+    display: flex;
+    align-items: flex-start;
+    width: 45%;
+    gap: 20px;
 }
 
 /* =========================================================

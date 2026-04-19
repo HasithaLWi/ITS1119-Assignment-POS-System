@@ -275,12 +275,28 @@
                     <div class="manage-header">
                         <div class="manage-box item-manage-box">
                             <div class="form-inline item-form-inline">
-                                <input class="input-field" type="text" id="item-code-input" placeholder="Item Code"
-                                    readonly>
-                                <input class="input-field" type="text" id="item-name-input" placeholder="Item Name"
-                                    class="wide-input">
-                                <input class="input-field" type="number" id="item-price-input" placeholder="Price">
-                                <input class="input-field" type="number" id="item-qty-input" placeholder="Stock Qty">
+                                <div class="item-code-input-group">
+                                    <label for="item-code-input" class="input-field-labels">Item Code:</label>
+                                    <input class="input-field" type="text" id="item-code-input" placeholder="ITEM-001"
+                                        readonly>
+                                    <div class="input-massege hidden" id="item-code-massege"></div>
+                                </div>
+                                <div class="item-name-input-group">
+                                    <label for="item-name-input" class="input-field-labels">Item Name:</label>
+                                    <input class="input-field" type="text" id="item-name-input" placeholder="Item Name"
+                                        class="wide-input">
+                                    <div class="input-massege hidden" id="item-name-massege"></div>
+                                </div>
+                                <div class="item-price-input-group">
+                                    <label for="item-price-input" class="input-field-labels">Price:</label>
+                                    <input class="input-field" type="number" id="item-price-input" placeholder="0.00">
+                                    <div class="input-massege hidden" id="item-price-massege"></div>
+                                </div>
+                                <div class="item-qty-input-group">
+                                    <label for="item-qty-input" class="input-field-labels">Stock Qty:</label>
+                                    <input class="input-field" type="number" id="item-qty-input" placeholder="0">
+                                    <div class="input-massege hidden" id="item-qty-massege"></div>
+                                </div>
                             </div>
                             <div class="manage-buttons item-manage-buttons">
                                 <button class="buttons btn btn-outline-success" id="save-item"
@@ -327,11 +343,30 @@
                     <div class="manage-header">
                         <div class="manage-box customer-manage-box">
                             <div class="form-inline customer-form-inline">
-                                <input class="input-field" type="text" id="cust-id-input" placeholder="Customer ID"
-                                    readonly>
-                                <input class="input-field" type="text" id="cust-name-input" placeholder="Customer Name">
-                                <input class="input-field" type="text" id="cust-phone-input" placeholder="Phone">
-                                <input class="input-field" type="text" id="cust-address-input" placeholder="Address">
+                                <div class="cust-id-input-group">
+                                    <label for="cust-id-input" class="input-field-labels ">Customer ID:</label>
+                                    <input class="input-field" type="text" id="cust-id-input" placeholder="CUS-001"
+                                        readonly>
+                                    <div class="input-massege hidden" id="cust-id-massege"></div>
+                                </div>
+                                <div class="cust-name-input-group">
+                                    <label for="cust-name-input" class="input-field-labels ">Customer
+                                        Name:</label>
+                                    <input class="input-field" type="text" id="cust-name-input"
+                                        placeholder="Customer Name">
+                                    <div class="input-massege hidden" id="cust-name-massege"></div>
+                                </div>
+                                <div class="cust-phone-input-group">
+                                    <label for="cust-phone-input" class="input-field-labels ">Phone:</label>
+                                    <input class="input-field" type="text" id="cust-phone-input" placeholder="Phone">
+                                    <div class="input-massege hidden" id="cust-phone-massege"></div>
+                                </div>
+                                <div class="cust-address-input-group">
+                                    <label for="cust-address-input" class="input-field-labels ">Address:</label>
+                                    <input class="input-field" type="text" id="cust-address-input"
+                                        placeholder="Address">
+                                    <div class="input-massege hidden" id="cust-address-massege"></div>
+                                </div>
                             </div>
                             <div class="manage-buttons customer-manage-buttons">
                                 <button class="buttons btn btn-outline-success" id="save-customer"

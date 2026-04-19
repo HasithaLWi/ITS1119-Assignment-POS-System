@@ -113,7 +113,7 @@ export function loadCartTable() {
 				<td>${detail.price}</td>
 				<td>${detail.qty}</td>
 				<td>${lineTotal.toFixed(2)}</td>
-				<td><button class="buttons btn btn-outline-danger" data-index="${index}">-</button></td>	
+				<td><button class="buttons btn btn-outline-danger cart-item-delete-btn" data-index="${index}">-</button></td>	
 			`;
 		cartTableBody.appendChild(row);
 
