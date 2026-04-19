@@ -82,9 +82,9 @@
                             aria-label="Violet accent"></button>
                     </div>
                 </div>
-                <span id="user-btn" class="btn-user">
+                <button id="user-btn" class="btn-user">
                     <img src="assets/user-logo.svg" alt="user-logo" class="user-logo">
-                </span>
+                </button>
             </div>
         </header>
 
@@ -461,10 +461,19 @@
             <p>v1.0.4 | Terminal: <strong>01</strong></p>
         </div>
     </footer>
+
+    <!-- User Manager Overlay -->
+    <div id="user-manager-overlay"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(5px); z-index: 10000; justify-content: center; align-items: center;">
+        <iframe src="user_manager.html"
+            style="width: 100%; height: 100%; border: none; background: transparent;"></iframe>
+    </div>
+
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-    <script type="module" src="script.js"></script>
+    <script type="module" src="utils/script.js"></script>
 
     <script type="module" src="controller/loginController.js"></script>
     <script type="module" src="controller/dashboardController.js"></script>
@@ -473,12 +482,7 @@
     <script type="module" src="controller/customerController.js"></script>
     <script type="module" src="controller/orderHistoryController.js"></script>
 
-    <!-- User Manager Overlay -->
-    <div id="user-manager-overlay"
-        style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(5px); z-index: 10000; justify-content: center; align-items: center;">
-        <iframe src="user_manager.html"
-            style="width: 100%; height: 100%; border: none; background: transparent;"></iframe>
-    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>

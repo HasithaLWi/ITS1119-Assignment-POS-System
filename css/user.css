@@ -2,6 +2,12 @@
    USER MANAGER — Unique Styles Only
    (All common styles come from style.css)
    ========================================================= */
+:root {
+    --accent-color: #f04b66;
+    --box-shadow-2: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    --text-main-2: #1d2333;
+    --bg-card: #ffffff;
+}
 
 body {
     background-color: transparent;
@@ -9,9 +15,23 @@ body {
     overflow: hidden;
 }
 
+p,
+span,
+label,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
+}
+
 .user-page {
     height: 100vh;
     max-height: 100vh;
+
 }
 
 /* Modal container — unique to user manager */
@@ -19,9 +39,9 @@ body {
     width: 90%;
     max-width: 1080px;
     max-height: 95vh;
-    border: 2px solid var(--accent);
+    border: 2px solid var(--accent-color);
     border-radius: 36px;
-    box-shadow: var(--box-shadow-1);
+    box-shadow: var(--box-shadow-2);
     background-color: #FFFFFF;
     overflow: hidden;
 }
@@ -34,6 +54,182 @@ body {
     gap: 24px;
     display: flex;
     flex-direction: column;
+    margin-bottom: 24px;
+}
+
+/* Global Scrollbar Styling (Webkit browsers like Chrome/Edge) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    /* Added height for horizontal scrollbars like the table's */
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: color-mix(in srgb, var(--accent-color) 10%, transparent);
+    border-radius: 4px;
+}
+
+/* Global Scrollbar Styling (Firefox) */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) transparent;
+}
+
+.page-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-main-2);
+}
+
+.input-field,
+.comb-box select,
+.search-box input,
+.input-date-field,
+.input-box input,
+.form-inline input {
+    background-color: transparent;
+    border: 1px dotted var(--accent-color);
+    color: var(--text-main-2);
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 13.6px;
+    outline: none;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+/* Focus State for All Inputs */
+.input-field:focus,
+.comb-box select:focus,
+.search-box input:focus,
+.input-box input:focus,
+.form-inline input:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color) 20%, transparent 80%);
+    border: 1px solid var(--accent-color);
+}
+
+/* Shared Input Labels */
+.input-field-labels {
+    color: #55607a;
+    font-size: 12.8px;
+    margin-bottom: 4px;
+}
+
+
+
+input::placeholder {
+    color: color-mix(in srgb, var(--text-main-2) 40%, transparent 60%);
+    font-size: 12px;
+    font-weight: 200;
+    font-family: 'Inter', sans-serif;
+}
+
+.form-card {
+
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: var(--box-shadow-2);
+}
+
+.form-card-header {
+    background-color: var(--accent-color);
+    padding: 12px 16px;
+}
+
+.form-card-header h3 {
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.form-card-field {
+    background-color: #FFFFFF;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 24px;
+}
+
+.buttons {
+    font-weight: 500;
+    border-width: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 6px 16px;
+}
+
+.buttons:hover {
+    opacity: 0.85;
+    color: white;
+}
+
+.manage-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.table-container {
+    width: 100%;
+    border-radius: 6px;
+    box-shadow: var(--box-shadow-2);
+}
+
+.table-header {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    padding: 12px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 6px 6px 0 0;
+    margin: 0;
+}
+
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #FFFFFF;
+}
+
+thead tr {
+    background-color: var(--bg-card);
+}
+
+tr {
+    width: 100%;
+}
+
+th {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 13.6px;
+    font-weight: 600;
+    color: var(--text-main-2);
+    background-color: color-mix(in srgb, var(--accent-color) 50%, transparent);
+}
+
+td {
+    padding: 14px 16px;
+    font-size: 13.6px;
+    color: #55607a;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent-color) 25%, transparent);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: color-mix(in srgb, var(--accent-color) 10%, transparent);
 }
 
 /* Close button — unique to user manager */
@@ -41,7 +237,7 @@ body {
     position: absolute;
     top: 16px;
     right: 24px;
-    color: var(--accent);
+    color: var(--accent-color);
     font-size: 28px;
     font-weight: 700;
     line-height: 1;
@@ -61,7 +257,7 @@ body {
 
 /* Search box width override */
 .user-search-box {
-    box-shadow: var(--box-shadow-1);
+    box-shadow: var(--box-shadow-2);
 }
 
 .form-card {

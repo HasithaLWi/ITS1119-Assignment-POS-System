@@ -1,4 +1,4 @@
-import { navLinks, pages } from "../script.js";
+import { navLinks, pages } from "../utils/script.js";
 import { OrderModel } from "../model/orderModel.js";
 import { customerModel } from "../model/customerModel.js";
 

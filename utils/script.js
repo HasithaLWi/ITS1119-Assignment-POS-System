@@ -1,14 +1,14 @@
-const THEME_KEY = "pos-theme";
 const ACCENT_KEY = "pos-accent";
 
 
-import { saveCustomer, updateCustomer, resetCustomerpage } from "./controller/customerController.js";
-import { saveItem, updateItem, resetItemPage } from "./controller/itemController.js";
-import { addItemToCart, placeOrder, updateOrder, resetOrderForm } from "./controller/orderController.js";
-import { resetOrderHistory } from "./controller/orderHistoryController.js";
-import { resetDashboard } from "./controller/dashboardController.js";
+import { saveCustomer, updateCustomer, resetCustomerpage } from "../controller/customerController.js";
+import { saveItem, updateItem, resetItemPage } from "../controller/itemController.js";
+import { addItemToCart, placeOrder, updateOrder, resetOrderForm } from "../controller/orderController.js";
+import { resetOrderHistory } from "../controller/orderHistoryController.js";
+// import { resetDashboard } from "./controller/dashboardController.js";
 
-window.saveCustomer = saveCustomer; 
+
+window.saveCustomer = saveCustomer;
 window.updateCustomer = updateCustomer;
 window.resetCustomerpage = resetCustomerpage;
 window.saveItem = saveItem;
@@ -24,6 +24,13 @@ window.resetOrderHistory = resetOrderHistory;
 
 function applyAccent(accentColor) {
 	document.body.style.setProperty("--accent", accentColor);
+
+
+	// Tell the iframe to update immediately without needing a reload
+	const iframe = document.querySelector("#user-manager-overlay iframe");
+	if (iframe && iframe.contentWindow) {
+		iframe.contentWindow.postMessage({ type: "SET_ACCENT", color: accentColor }, "*");
+	}
 }
 
 export function initAccentPicker() {
@@ -32,12 +39,17 @@ export function initAccentPicker() {
 	const accentPalette = document.getElementById("accent-palette");
 	const swatches = document.querySelectorAll(".accent-swatch");
 
-	if (!accentPicker || !colorCircle || !accentPalette || swatches.length === 0) {
+	// if (!accentPicker || !colorCircle || !accentPalette || swatches.length === 0) {
+	// 	return;
+	// }
+	if (swatches.length === 0) {
 		return;
 	}
 
 	const defaultAccent = getComputedStyle(document.body).getPropertyValue("--accent").trim() || "#f04b66";
 	const savedAccent = localStorage.getItem(ACCENT_KEY) || defaultAccent;
+	// const savedAccent = defaultAccent;
+
 
 	applyAccent(savedAccent);
 	swatches.forEach((swatch) => {
@@ -47,8 +59,8 @@ export function initAccentPicker() {
 	colorCircle.addEventListener("click", (event) => {
 		event.stopPropagation();
 		accentPalette.classList.toggle("hidden");
-		const isExpanded = !accentPalette.classList.contains("hidden");
-		colorCircle.setAttribute("aria-expanded", String(isExpanded));
+		// const isExpanded = !accentPalette.classList.contains("hidden");
+		// colorCircle.setAttribute("aria-expanded", String(isExpanded));
 	});
 
 	swatches.forEach((swatch) => {
@@ -62,65 +74,28 @@ export function initAccentPicker() {
 
 			applyAccent(selectedAccent);
 			localStorage.setItem(ACCENT_KEY, selectedAccent);
-			
+
 			swatches.forEach((item) => item.classList.remove("active"));
 			swatch.classList.add("active");
 
 			accentPalette.classList.add("hidden");
-			colorCircle.setAttribute("aria-expanded", "false");
+			// colorCircle.setAttribute("aria-expanded", "false");
 		});
 	});
 
 	document.addEventListener("click", (event) => {
 		if (!accentPicker.contains(event.target)) {
 			accentPalette.classList.add("hidden");
-			colorCircle.setAttribute("aria-expanded", "false");
+			// colorCircle.setAttribute("aria-expanded", "false");
 		}
 	});
 }
 
-export function applyTheme(theme, button) {
-	const isLight = theme === "light";
-	document.body.classList.toggle("light-mode", isLight);
 
-	if (!button) {
-		return;
-	}
-
-	const icon = button.querySelector(".theme-icon");
-	const label = button.querySelector(".theme-label");
-
-	if (icon) {
-		icon.textContent = isLight ? "☀" : "🌙";
-	}
-
-	if (label) {
-		label.textContent = isLight ? "Light" : "Dark";
-	}
-
-	const nextModeLabel = isLight ? "dark" : "light";
-	button.setAttribute("aria-label", `Switch to ${nextModeLabel} mode`);
-}
 
 document.addEventListener("DOMContentLoaded", () => {
-	const toggleButton = document.getElementById("theme-toggle");
-
-	if (toggleButton) {
-		const savedTheme = localStorage.getItem(THEME_KEY);
-		const initialTheme = savedTheme === "light" ? "light" : "dark";
-		applyTheme(initialTheme, toggleButton);
-
-		toggleButton.addEventListener("click", () => {
-			const isLightMode = document.body.classList.contains("light-mode");
-			const nextTheme = isLightMode ? "dark" : "light";
-
-			applyTheme(nextTheme, toggleButton);
-			localStorage.setItem(THEME_KEY, nextTheme);
-		});
-	}
-
 	initAccentPicker();
-	resetDashboard();
+	// resetDashboard();
 
 	// User Manager Overlay Logic
 	const userBtn = document.getElementById("user-btn");
@@ -128,10 +103,11 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (userBtn && userManagerOverlay) {
 		userBtn.addEventListener("click", () => {
 			userManagerOverlay.style.display = "flex";
+
 		});
 	}
 
-	window.closeUserManager = function() {
+	window.closeUserManager = function () {
 		if (userManagerOverlay) {
 			userManagerOverlay.style.display = "none";
 		}
