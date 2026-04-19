@@ -244,9 +244,10 @@ nav {
 .input-date-field:focus,
 .input-box input:focus,
 .form-inline input:focus {
-    background-color: var(--input-bg);
-    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent 80%);
+    border: 1px solid var(--accent);
 }
+
 
 /* Shared Input Labels */
 .input-field-labels,
@@ -498,9 +499,10 @@ tbody tr:hover {
 }
 
 .form-card {
-    background-color: transparent;
+
     border-radius: 6px;
     overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .form-card-header {
@@ -515,11 +517,21 @@ tbody tr:hover {
 }
 
 .form-card-field {
+    background-color: #FFFFFF;
     display: grid;
-    background-color: var(--bg-card);
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     padding: 24px;
+}
+
+.comb-box,
+.order-cust-name,
+.item-name-input-box {
+    grid-column: span 2;
+}
+
+.order-cust-address {
+    grid-column: span 3;
 }
 
 .input-box,
@@ -529,14 +541,18 @@ tbody tr:hover {
     gap: 6px;
 }
 
-.input-box.full-width {
-    grid-column: span 2;
+#add-to-cart {
+    grid-column: span 3;
+    margin-top: 20px;
+    padding: 12px 16px;
+    font-size: 14.4px;
 }
 
 .summary-card {
-    background-color: var(--bg-card);
+    background-color: #FFFFFF;
     padding: 24px;
     border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .total-text {
@@ -578,14 +594,15 @@ tbody tr:hover {
     margin-top: 16px;
 }
 
-.order-update-btns .btn-delete {
-    background-color: red;
+#order-reset,
+#order-cancel {
     width: 50%;
     flex-grow: 1;
+
 }
 
-.order-update-btns .btn-update {
-    background-color: var(--btn-blue);
+#purchase-order,
+#update-order {
     width: 100%;
     flex-grow: 1;
 }
@@ -628,6 +645,7 @@ tbody tr:hover {
     transition: opacity 0.2s ease;
 }
 
+
 /* =========================================================
    ITEMS & CUSTOMERS SECTIONS
    ========================================================= */
@@ -655,8 +673,16 @@ tbody tr:hover {
 
 .form-inline {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     gap: 15px;
+}
+
+#cust-name-input {
+    grid-column: span 2;
+}
+
+#cust-address-input {
+    grid-column: span 3;
 }
 
 .manage-buttons {
