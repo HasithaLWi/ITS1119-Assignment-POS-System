@@ -2,6 +2,7 @@ import { Customer } from "../dto/customer.js";
 import { customerModel } from "../model/customerModel.js";
 import { resetDashboard } from "./dashboardController.js";
 import { resetOrderForm } from "./orderController.js";
+import { showAlert, showConfirm } from "../utils/showAlert.js";
 
 const customerModelInstance = new customerModel();
 let customerDataList = [];
@@ -53,7 +54,7 @@ export function saveCustomer() {
 
 	const validation = isCustomerFormValid(false);
 	if (!validation.isValid) {
-		alert(validation.message);
+		showAlert("Invalid Input", validation.message, "warning");
 		return;
 	}
 	const newCustomerId = customerModelInstance.generateNewCustomerId();
@@ -103,12 +104,12 @@ export function updateCustomer() {
 	const address = addressInput.value.trim();
 
 	if (id === "") {
-		alert("Please select a customer first.");
+		showAlert("No Customer Selected", "Please select a customer first.", "info");
 		return;
 	}
 	const validation = isCustomerFormValid(true);
 	if (!validation.isValid) {
-		alert(validation.message);
+		showAlert("Invalid Input", validation.message, "warning");
 		return;
 	}
 
@@ -117,7 +118,7 @@ export function updateCustomer() {
 	resetDashboard();
 	resetCustomerpage();
 
-	alert("Customer updated successfully.");
+	showAlert("Customer Updated", "Customer updated successfully.", "success");
 
 }
 

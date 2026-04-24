@@ -1,6 +1,7 @@
 import { navLinks, pages } from "../utils/script.js";
 import { OrderModel } from "../model/orderModel.js";
 import { customerModel } from "../model/customerModel.js";
+import { showAlert } from "../utils/showAlert.js";
 
 const orderModelInstance = new OrderModel();
 const customerModelInstance = new customerModel();
@@ -122,12 +123,12 @@ document.querySelectorAll(".filter-by-date").forEach((input) => {
 export function navigateToOrderFromHistory() {
 	const orderId = document.getElementById("order-id-display").value.trim();
 	if (orderId === "") {
-		alert("Please select an order from the history table first.");
+		showAlert("No Order Selected", "Please select an order from the history table first.", "info");
 		return;
 	}
 	const order = orderHistoryDataList.find(o => o.id === orderId);
 	if (!order) {
-		alert("Selected order not found.");
+		showAlert("Order Not Found", "Selected order not found.", "error");
 		return;
 	}
 

@@ -1,4 +1,5 @@
 import { itemDB, ordersDetailsList } from "../db/data.js";
+import { showAlert } from "../utils/showAlert.js";
 
 export class ItemModel {
 
@@ -24,7 +25,8 @@ export class ItemModel {
             return;
         }
         itemDB.push(item);
-        alert("Item added successfully.");
+        // alert("Item added successfully.");
+        showAlert("Item Added", "Item added successfully.", "success");
     }
 
     updateItem(updatedItem) {

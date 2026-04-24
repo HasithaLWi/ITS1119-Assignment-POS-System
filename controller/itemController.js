@@ -3,6 +3,7 @@ import { Item } from "../dto/item.js";
 import { ItemModel } from "../model/itemModel.js";
 import { resetDashboard } from "./dashboardController.js";
 import { resetOrderForm } from "./orderController.js";
+import { showAlert, showConfirm } from "../utils/showAlert.js";
 
 const itemModelInstance = new ItemModel();
 let selectedItemId = null;
@@ -85,7 +86,7 @@ function isItemFormValid() {
 export function saveItem() {
 	const validation = isItemFormValid();
 	if (!validation.isValid) {
-		alert(validation.message);
+		showAlert("Invalid Input", validation.message, "warning");
 		return;
 	}
 
@@ -108,19 +109,19 @@ export function updateItem() {
 	const itemQtyInput = document.getElementById("item-qty-input");
 
 	if (selectedItemId === null) {
-		alert("Please select an item first.");
+		showAlert("No Item Selected", "Please select an item first.", "info");
 		return;
 	}
 
 	const validation = isItemFormValid();
 	if (!validation.isValid) {
-		alert(validation.message);
+		showAlert("Invalid Input", validation.message, "warning");
 		return;
 	}
 
 	const index = itemsDataList.findIndex((item) => item.id === selectedItemId);
 	if (index < 0 || index >= itemsDataList.length) {
-		alert("Invalid item code.");
+		showAlert("Error", "Invalid item code.", "error");
 		return;
 	}
 

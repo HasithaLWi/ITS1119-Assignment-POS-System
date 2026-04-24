@@ -5,6 +5,7 @@ import { resetCustomerpage } from "./customerController.js";
 import { resetItemPage } from "./itemController.js";
 import { UserModel } from "../model/userModel.js";
 import { resetUserPage } from "../controller/userController.js";
+import { showAlert } from "../utils/showAlert.js";
 
 const userModelInstance = new UserModel();
 
@@ -21,18 +22,18 @@ loginBtn.addEventListener("click", (event) => {
     const password = document.getElementById("password").value.trim();
 
     if (username === "") {
-        alert("Please enter a username.");
+        showAlert("Username Required", "Please enter a username.", "warning");
         return;
     } else if (getUserByUsername(username).isValid === false) {
-        alert("Invalid username. Please try again.");
+        showAlert("Invalid Username", "Invalid username. Please try again.", "error");
         return;
     }
 
     if (password === "") {
-        alert("Please enter a password.");
+        showAlert("Password Required", "Please enter a password.", "warning");
         return;
     } else if (password !== getUserByUsername(username).user.password) {
-        alert("Invalid password. Please try again.");
+        showAlert("Invalid Password", "Invalid password. Please try again.", "error");
         console.log(getUserByUsername(username).user.password);
         console.log(password);
         return;

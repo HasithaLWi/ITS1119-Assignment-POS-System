@@ -9,6 +9,7 @@ import { CartItem } from "../dto/tm/cartItem.js";
 import { Order } from "../dto/order.js";
 import { OrderDetails } from "../dto/orderDetails.js";
 import { showOrderUpdateButton, navigateToOrderFromHistory } from "./orderHistoryController.js";
+import { showAlert } from "../utils/showAlert.js";
 
 
 
@@ -149,7 +150,7 @@ function selectCustomerForOrder() {
 		customerPhoneInput.value = customer.phone;
 		customerAddressInput.value = customer.address;
 	} else {
-		alert("Selected customer not found.");
+		showAlert("Customer Not Found", "Selected customer not found.", "error");
 	}
 }
 
@@ -181,7 +182,7 @@ function selectItemForOrder() {
 		itemPriceInput.value = item.price;
 		itemQtyInput.value = item.qty;
 	} else {
-		alert("Selected item not found.");
+		showAlert("Item Not Found", "Selected item not found.", "error");
 	}
 }
 
@@ -229,7 +230,7 @@ export function addItemToCart() {
 
 	const isValid = isOrderFormValid();
 	if (!isValid.isValid) {
-		alert(isValid.message);
+		showAlert("Invalid Input", isValid.message, "warning");
 		return;
 	}
 
@@ -367,14 +368,14 @@ export function placeOrder() {
 
 
 	if (itemCartList.length === 0) {
-		alert("Please add at least one item to the cart before placing the order.");
+		showAlert("Cart Empty", "Please add at least one item to the cart before placing the order.", "warning");
 		return;
 	}
 
 
 
 	if (!isPlaceOrderFormValid().isValid) {
-		alert(isPlaceOrderFormValid().message);
+		showAlert("Invalid Order", isPlaceOrderFormValid().message, "warning");
 		return;
 	}
 
@@ -393,7 +394,7 @@ export function placeOrder() {
 
 	orderModelInstance.placeOrder(newOrder);
 
-	alert("Order placed successfully!");
+	showAlert("Order Placed", "Order placed successfully!", "success");
 	loadItems();
 	loadItemTable();
 	resetDashboard();
@@ -412,7 +413,7 @@ export function updateOrder() {
 
 
 	if (orderId === "") {
-		alert("Please select an order to update.");
+		showAlert("No Order Selected", "Please select an order to update.", "info");
 		return;
 	}
 
@@ -420,18 +421,18 @@ export function updateOrder() {
 	partialPaidAmount = existingOrder ? Number(existingOrder.paid) : 0;
 
 	if (!existingOrder) {
-		alert("Selected order not found.");
+		showAlert("Order Not Found", "Selected order not found.", "error");
 		return;
 	}
 
 	if (itemCartList.length === 0) {
-		alert("Please add at least one item to the cart before updating the order.");
+		showAlert("Cart Empty", "Please add at least one item to the cart before updating the order.", "warning");
 		return;
 	}
 
 	const validation = isPlaceOrderFormValid();
 	if (!validation.isValid) {
-		alert(validation.message);
+		showAlert("Invalid Order", validation.message, "warning");
 		return;
 	}
 
