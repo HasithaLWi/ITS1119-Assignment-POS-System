@@ -34,15 +34,14 @@ export class customerModel {
         const orderIndex = ordersList.findIndex(o => o.customerId === customerId);
         if (index >= 0 && index < customerDB.length) {
             if (orderIndex >= 0) {
-                alert("Cannot delete customer with existing orders.");
 
-                return;
+                return { isError: true, title: "Error", message: "Cannot delete customer with existing orders.", type: "error" };
             }
 
             customerDB.splice(index, 1);
-            alert("Customer deleted successfully.");
+            return { isError: false, title: "Success", message: "Customer deleted successfully.", type: "success" };
         } else {
-            alert("Invalid Customer ID.");
+            return { isError: true, title: "Error", message: "Invalid Customer ID.", type: "error" };
         }
     }
 

@@ -36,16 +36,13 @@ export function initAccentPicker() {
 	const accentPalette = document.getElementById("accent-palette");
 	const swatches = document.querySelectorAll(".accent-swatch");
 
-	// if (!accentPicker || !colorCircle || !accentPalette || swatches.length === 0) {
-	// 	return;
-	// }
 	if (swatches.length === 0) {
 		return;
 	}
 
 	const defaultAccent = getComputedStyle(document.body).getPropertyValue("--accent").trim() || "#f04b66";
 	const savedAccent = localStorage.getItem(ACCENT_KEY) || defaultAccent;
-	// const savedAccent = defaultAccent;
+
 
 
 	applyAccent(savedAccent);
@@ -56,8 +53,6 @@ export function initAccentPicker() {
 	colorCircle.addEventListener("click", (event) => {
 		event.stopPropagation();
 		accentPalette.classList.toggle("hidden");
-		// const isExpanded = !accentPalette.classList.contains("hidden");
-		// colorCircle.setAttribute("aria-expanded", String(isExpanded));
 	});
 
 	swatches.forEach((swatch) => {
@@ -76,14 +71,12 @@ export function initAccentPicker() {
 			swatch.classList.add("active");
 
 			accentPalette.classList.add("hidden");
-			// colorCircle.setAttribute("aria-expanded", "false");
 		});
 	});
 
 	document.addEventListener("click", (event) => {
 		if (!accentPicker.contains(event.target)) {
 			accentPalette.classList.add("hidden");
-			// colorCircle.setAttribute("aria-expanded", "false");
 		}
 	});
 }
@@ -92,9 +85,7 @@ export function initAccentPicker() {
 
 document.addEventListener("DOMContentLoaded", () => {
 	initAccentPicker();
-	// resetDashboard();
 
-	// User Manager Overlay Logic
 	const userBtn = document.getElementById("user-btn");
 	const userManagerOverlay = document.getElementById("user-manager-overlay");
 	if (userBtn && userManagerOverlay) {

@@ -5,9 +5,6 @@
     --text-main: #ffffff;
     --text-muted: #8f96a7;
 
-
-
-    /* Glassmorphism tokens */
     --glass-bg: rgba(255, 255, 255, 0.15);
     --glass-border: rgba(255, 255, 255, 0.55);
     --glass-blur: 5px;
@@ -42,7 +39,6 @@ h6 {
 
 }
 
-/* Modal container — unique to user manager */
 .user-modal {
     width: 90%;
     max-width: 1080px;
@@ -67,11 +63,10 @@ h6 {
     margin-bottom: 24px;
 }
 
-/* Global Scrollbar Styling (Webkit browsers like Chrome/Edge) */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
-    /* Added height for horizontal scrollbars like the table's */
+
 }
 
 ::-webkit-scrollbar-thumb {
@@ -84,7 +79,7 @@ h6 {
     border-radius: 4px;
 }
 
-/* Global Scrollbar Styling (Firefox) */
+
 * {
     scrollbar-width: thin;
     scrollbar-color: var(--accent-color) transparent;
@@ -114,7 +109,7 @@ h6 {
     transition: all 0.2s ease;
 }
 
-/* Focus State for All Inputs */
+
 .input-field:focus,
 .comb-box select:focus,
 .search-box input:focus,
@@ -124,7 +119,7 @@ h6 {
     border: 1px solid var(--accent-color);
 }
 
-/* Shared Input Labels */
+
 .input-field-labels {
     color: #939496;
     font-size: 12.8px;
@@ -241,12 +236,6 @@ table {
     background-color: transparent;
 }
 
-
-
-/* thead tr {
-    background-color: var(--bg-card);
-} */
-
 th {
     text-align: left;
     padding: 14px 16px;
@@ -275,7 +264,7 @@ tbody tr:hover {
     background-color: color-mix(in srgb, var(--accent-color) 10%, transparent);
 }
 
-/* Close button — unique to user manager */
+
 .close-btn {
     position: absolute;
     top: 16px;
@@ -298,7 +287,6 @@ tbody tr:hover {
     background-color: transparent;
 }
 
-/* Search box width override */
 .user-search-box {
     box-shadow: var(--glass-shadow);
     border: 1px solid color-mix(in srgb, var(--accent-color) 15%, var(--glass-border));

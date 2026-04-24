@@ -13,7 +13,6 @@
     --danger-color: #dc3545;
     --primary-color: #0d6efd;
 
-    /* Glassmorphism tokens */
     --glass-bg: rgba(255, 255, 255, 0.15);
     --glass-border: rgba(255, 255, 255, 0.55);
     --glass-blur: 5px;
@@ -218,7 +217,7 @@ nav {
 
 
 /* =========================================================
-   UTILITY STYLES — Shared Input Base
+   Shared Input 
    ========================================================= */
 .input-field,
 .comb-box select,
@@ -237,7 +236,6 @@ nav {
     transition: all 0.2s ease;
 }
 
-/* Focus State for All Inputs */
 .input-field:focus,
 .comb-box select:focus,
 .search-box input:focus,
@@ -248,8 +246,6 @@ nav {
     border: 1px solid var(--accent);
 }
 
-
-/* Shared Input Labels */
 .input-field-labels,
 .input-date-field-labels {
     color: var(--text-muted);
@@ -703,7 +699,7 @@ tbody tr:hover {
     font-size: 14.4px;
 }
 
-/* Shared accent-colored action button (Remove / Delete) */
+
 .btn-remove,
 .btn-delete {
     background-color: var(--accent);
@@ -921,7 +917,6 @@ tbody tr:hover {
     cursor: default;
 }
 
-/* SweetAlert2 glassmorphism overrides */
 .swal2-popup {
     background: rgba(255, 255, 255, 0.05) !important;
     border-radius: 16px !important;

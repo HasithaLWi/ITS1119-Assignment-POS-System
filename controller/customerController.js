@@ -69,17 +69,21 @@ export function saveCustomer() {
 }
 
 // Delete Customer
-document.addEventListener("click", (event) => {
+document.addEventListener("click", async (event) => {
 	if (event.target.classList.contains("customer-delete-btn")) {
-		if (!confirm("Are you sure you want to delete this customer?")) {
+		if (!await showConfirm("Confirmation Alert", "Are you sure you want to delete this customer?", "question")) {
 			return;
 		}
 		const index = event.target.dataset.index;
 		if (index !== undefined) {
 			customerDataList.forEach((customer, i) => {
 				if (i == index) {
-					customerModelInstance.deleteCustomer(customer.id);
-					return;
+					const result = customerModelInstance.deleteCustomer(customer.id);
+					if (result.isError) {
+						showAlert(result.title, result.message, result.type);
+						return;
+					}
+					showAlert(result.title, result.message, result.type);
 				}
 			});
 
