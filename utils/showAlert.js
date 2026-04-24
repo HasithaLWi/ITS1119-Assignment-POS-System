@@ -20,11 +20,11 @@ function baseConfig() {
     return {
         // background: "rgba(20, 20, 35, 0.82)",
         color: "#f0f0f0",
-        backdrop: "rgba(0, 0, 0, 0.55)",
+        // backdrop: "rgba(0, 0, 0, 0.55)",
         customClass: {
             popup: "swal2-popup",
-            // confirmButton: "swal2-confirm",
-            // cancelButton: "swal2-cancel",
+            confirmButton: "swal2-confirm",
+            cancelButton: "swal2-cancel",
         },
         confirmButtonColor: accent,
         cancelButtonColor: "rgba(255,255,255,0.12)",
