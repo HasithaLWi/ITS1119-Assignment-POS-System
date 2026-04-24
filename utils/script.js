@@ -6,6 +6,7 @@ import { saveItem, updateItem, resetItemPage } from "../controller/itemControlle
 import { addItemToCart, placeOrder, updateOrder, resetOrderForm } from "../controller/orderController.js";
 import { resetOrderHistory } from "../controller/orderHistoryController.js";
 // import { resetDashboard } from "./controller/dashboardController.js";
+import { resetUserPage } from "../controller/userController.js";
 
 window.saveCustomer = saveCustomer;
 window.updateCustomer = updateCustomer;
@@ -18,7 +19,6 @@ window.resetOrderForm = resetOrderForm;
 window.placeOrder = placeOrder;
 window.updateOrder = updateOrder;
 window.resetOrderHistory = resetOrderHistory;
-
 
 function applyAccent(accentColor) {
 	document.body.style.setProperty("--accent", accentColor);

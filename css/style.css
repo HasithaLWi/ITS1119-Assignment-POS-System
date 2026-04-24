@@ -18,8 +18,8 @@
     /* Glassmorphism tokens */
     --glass-bg: rgba(255, 255, 255, 0.15);
     --glass-border: rgba(255, 255, 255, 0.55);
-    --glass-blur: 20px;
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    --glass-blur: 5px;
+    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -30,9 +30,6 @@
 }
 
 body {
-    /* add white varinat color it can see card properlu */
-    /* background: linear-gradient(135deg, #ffffff 0%, color-mix(in srgb, var(--accent) 30%, transparent 70%) 60%, #ffffff 100%); */
-    /* background-color: color-mix(in srgb, black 50%, transparent 50%); */
     background-color: black;
     color: var(--text-main);
     min-height: 100vh;
@@ -42,6 +39,20 @@ p,
 h3 {
     padding: 0;
     margin: 0;
+}
+
+#user-manager-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
 }
 
 /* =========================================================
@@ -280,6 +291,19 @@ nav {
     margin-bottom: 4px;
 }
 
+select option {
+    color: var(--text-main);
+    background-color: rgba(0, 0, 0, 0.6);
+    margin: 0px;
+    border-radius: 0px;
+    font-size: 13.6px;
+    outline: none;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+
+
 
 
 input::placeholder {
@@ -375,8 +399,8 @@ input::placeholder {
 
 .input-wrapper input {
     width: 100%;
-    background-color: var(--input-bg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: transparent;
+    border: 1px dotted var(--accent);
     color: var(--text-main);
     padding: 14px 16px;
     border-radius: 8px;
@@ -390,9 +414,8 @@ input::placeholder {
 }
 
 .input-wrapper input:focus {
-    background-color: var(--bg-main);
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(240, 75, 102, 0.15);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent 80%);
+    border: 1px solid var(--accent);
 }
 
 .login-btn {
@@ -555,22 +578,12 @@ tbody tr:hover {
 }
 
 .form-card {
-
     border-radius: 12px;
     overflow: hidden;
-    /* background: var(--glass-bg); */
-    /* backdrop-filter: blur(var(--glass-blur)); */
-    /* -webkit-backdrop-filter: blur(var(--glass-blur)); */
-    /* border: 1px solid color-mix(in srgb, var(--accent) 15%, var(--glass-border)); */
-    /* box-shadow: var(--glass-shadow); */
-
-    /* From https://css.glass */
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    /* border: 1px solid rgba(255, 255, 255, 0.3); */
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    box-shadow: var(--glass-shadow);
 }
 
 .form-card-header {
@@ -780,11 +793,7 @@ tbody tr:hover {
 .item-search-box input,
 .customer-search-box input {
     width: 100%;
-    background: var(--glass-bg);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid color-mix(in srgb, var(--accent) 15%, var(--glass-border));
-    box-shadow: var(--glass-shadow);
+    background-color: transparent;
 }
 
 .item-search-box,
@@ -803,10 +812,16 @@ tbody tr:hover {
     padding: 24px;
     border-radius: 12px;
     flex: 1;
-    max-width: 700px;
+    max-width: 100%;
+    min-height: 254px;
     box-shadow: var(--glass-shadow);
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+}
+
+.input-massege {
+    font-size: 12px;
+    font-weight: 600;
 }
 
 

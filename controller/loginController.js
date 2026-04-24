@@ -4,6 +4,7 @@ import { resetOrderHistory } from "./orderHistoryController.js";
 import { resetCustomerpage } from "./customerController.js";
 import { resetItemPage } from "./itemController.js";
 import { UserModel } from "../model/userModel.js";
+import { resetUserPage } from "../controller/userController.js";
 
 const userModelInstance = new UserModel();
 
@@ -32,6 +33,8 @@ loginBtn.addEventListener("click", (event) => {
         return;
     } else if (password !== getUserByUsername(username).user.password) {
         alert("Invalid password. Please try again.");
+        console.log(getUserByUsername(username).user.password);
+        console.log(password);
         return;
     }
 
@@ -44,5 +47,6 @@ loginBtn.addEventListener("click", (event) => {
     resetOrderForm();
     resetOrderHistory();
     resetDashboard();
+    resetUserPage();
 
 });
