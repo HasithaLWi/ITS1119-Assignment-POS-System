@@ -4,12 +4,8 @@
     --accent: #d84c6f;
     --newAccent: #FF8C00;
     --newAccent2: #FFD54F;
-
-    /* --text-main: #1d2333; */
     --text-main: #ffffff;
-    /* --text-muted: #55607a; */
     --text-muted: #8f96a7;
-    --header-bg: #ffffff;
     --input-bg: #e8efff;
     --btn-blue: #2f78d9;
     --btn-green: #2f9f66;
@@ -203,59 +199,27 @@ nav {
     align-items: center;
     justify-content: center;
     background-color: transparent !important;
-    border: 2px solid var(--accent);
-    border-radius: 50%;
-    height: 42px;
-    width: 42px;
+    border: none !important;
+
+
+}
+
+.btn-user i {
     cursor: pointer;
-    position: relative;
+    color: color-mix(in srgb, var(--accent) 80%, transparent 20%);
+    font-size: 36px;
+    transition: all 0.2s ease;
+
 }
 
-.btn-user:hover {
-    border: 3px solid var(--accent);
+.btn-user:hover i {
+    color: var(--accent);
 }
 
-/* User Head */
-.btn-user::before {
-    content: '';
-    position: absolute;
-    top: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 13px;
-    height: 13px;
-    background-color: var(--accent);
-    border-radius: 50%;
-    box-shadow: 0 2.5px 0px #d5dae3;
-    z-index: 2;
-}
-
-/* User Body */
-.btn-user::after {
-    content: '';
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 24px;
-    height: 11px;
-    background-color: var(--accent);
-    border-radius: 12px 12px 4.5px 4.5px;
-    box-shadow: 0 2.5px 0px #d5dae3;
-    z-index: 2;
-}
-
-.user-logo {
-    display: none;
-}
 
 /* =========================================================
    UTILITY STYLES — Shared Input Base
    ========================================================= */
-
-/* Consolidated: .input-field, .comb-box select, .search-box input,
-   .input-date-field, .input-box input, .form-inline input all share
-   the same base look. */
 .input-field,
 .comb-box select,
 .search-box input,
