@@ -36,9 +36,9 @@ function loadUserTable() {
                 <td>${user.address}</td>
                 <td>${user.phone}</td>
                 <td>${user.username}</td>
-                <td>
-                    <i class="fa fa-trash user-delete-btn text-danger" data-index="${index}" style=" width: 15px;  padding: 0px 5px; cursor: pointer;"></i>
-                    <i class="fa fa-edit user-update-btn text-primary" data-index="${index}" style=" width: 15px; padding: 0px 5px; cursor: pointer;"></i>
+                <td style="display: flex; justify-content: left; gap: 20px;">
+                    <i class="bi bi-trash3 user-delete-btn" data-index="${index}"></i>
+                    <i class="bi bi-pencil-square user-update-btn" data-index="${index}"></i>
                 </td>
             `);
             userTableBody.append($row);

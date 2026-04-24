@@ -12,6 +12,8 @@
     --glass-border: rgba(255, 255, 255, 0.55);
     --glass-blur: 5px;
     --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    --danger-color: #dc3545;
+    --primary-color: #0d6efd;
 }
 
 body {
@@ -315,4 +317,23 @@ tbody tr:hover {
 .input-massege {
     font-size: 12px;
     font-weight: 600;
+}
+
+.user-delete-btn,
+.user-update-btn {
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.user-delete-btn:hover {
+    color: var(--danger-color);
+    background-color: transparent;
+    transform: scale(1.2);
+}
+
+.user-update-btn:hover {
+    color: var(--primary-color);
+    background-color: transparent;
+    transform: scale(1.2);
 }

@@ -37,7 +37,10 @@ export function loadItemTable(items = itemsDataList) {
 			<td>${item.name}</td>
 			<td>${item.price}</td>
 			<td>${item.qty}</td>
-			<td><button class="buttons btn btn-outline-danger item-delete-btn" data-index="${index}">Delete</button></td>
+			<td class="item-actions-cell d-flex justify-content-left gap-4">
+				<i class="bi bi-trash3 item-delete-btn fs-4" data-index="${index}"></i>
+				<i class="bi bi-pencil-square item-update-btn fs-4" data-index="${index}"></i>
+			</td>
 		`;
 		itemsTableBody.appendChild(row);
 	});

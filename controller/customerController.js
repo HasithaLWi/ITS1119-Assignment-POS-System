@@ -31,7 +31,9 @@ function loadCustomerTable(customerData = customerDataList) {
 				<td>${customer.name}</td>
 				<td>${customer.phone}</td>
 				<td>${customer.address}</td>
-				<td><button class="buttons btn btn-outline-danger customer-delete-btn" data-index="${index}">Delete</button>
+				<td class="customer-actions-cell d-flex justify-content-left gap-4">
+					<i class="bi bi-trash3 customer-delete-btn fs-4" data-index="${index}"></i>
+					<i class="bi bi-pencil-square customer-update-btn fs-4" data-index="${index}"></i>
 				</td>
 			`);
 			customersTableBody.append($row);
