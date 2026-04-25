@@ -1,6 +1,8 @@
 import { Customer } from "../dto/customer.js";
 import { Item } from "../dto/item.js";
 import { User } from "../dto/user.js";
+import { Order } from "../dto/order.js";
+import { OrderDetails } from "../dto/orderDetails.js";
 
 
 
@@ -13,11 +15,11 @@ export const customerDB = [
 ];
 
 export const itemDB = [
-	new Item("ITM-001", "Item one", 500, 10),
-	new Item("ITM-002", "Item two", 1000, 5),
-	new Item("ITM-003", "Item three", 750, 8),
-	new Item("ITM-004", "Item four", 1200, 3),
-	new Item("ITM-005", "Item five", 300, 15)
+	new Item("ITM-001", "Item one", 5000, 10),
+	new Item("ITM-002", "Item two", 7000, 5),
+	new Item("ITM-003", "Item three", 2000, 8),
+	new Item("ITM-004", "Item four", 8500, 3),
+	new Item("ITM-005", "Item five", 3000, 15)
 ];
 
 export const usersDB = [
@@ -27,22 +29,19 @@ export const usersDB = [
 ];
 
 export const ordersDetailsList = [
-	{ orderId: "ORD-001", itemId: "ITM-001", qty: 2 },
-	{ orderId: "ORD-002", itemId: "ITM-002", qty: 1 },
-	{ orderId: "ORD-002", itemId: "ITM-003", qty: 3 },
-	{ orderId: "ORD-003", itemId: "ITM-004", qty: 4 },
-	{ orderId: "ORD-004", itemId: "ITM-005", qty: 2 },
-	{ orderId: "ORD-004", itemId: "ITM-001", qty: 1 },
-	{ orderId: "ORD-005", itemId: "ITM-003", qty: 5 }
+	new OrderDetails("ORD-001", "ITM-001", 2),
+	new OrderDetails("ORD-002", "ITM-002", 1),
+	new OrderDetails("ORD-002", "ITM-003", 3),
+	new OrderDetails("ORD-003", "ITM-004", 4),
+	new OrderDetails("ORD-004", "ITM-005", 2),
+	new OrderDetails("ORD-004", "ITM-001", 1),
+	new OrderDetails("ORD-005", "ITM-003", 5)
 ];
 
 export const ordersList = [
-	{ id: "ORD-001", customerId: "CUS-001", date: "2024-06-01", total: 10000, discount: 12, paid: 8800, orderDetails: [{ orderId: "ORD-001", itemId: "ITM-001", qty: 2 }] },
-	{ id: "ORD-002", customerId: "CUS-002", date: "2024-06-02", total: 5000, discount: 15, paid: 4250, orderDetails: [{ orderId: "ORD-002", itemId: "ITM-002", qty: 1 }, { orderId: "ORD-002", itemId: "ITM-003", qty: 3 }] },
-	{ id: "ORD-003", customerId: "CUS-003", date: "2024-06-03", total: 15000, discount: 0, paid: 15000, orderDetails: [{ orderId: "ORD-003", itemId: "ITM-004", qty: 4 }] },
-	{ id: "ORD-004", customerId: "CUS-004", date: "2024-06-04", total: 12500, discount: 8, paid: 1500, orderDetails: [{ orderId: "ORD-004", itemId: "ITM-005", qty: 2 }, { orderId: "ORD-004", itemId: "ITM-001", qty: 1 }] },
-	{ id: "ORD-005", customerId: "CUS-005", date: "2024-06-05", total: 8500, discount: 10, paid: 7650, orderDetails: [{ orderId: "ORD-005", itemId: "ITM-003", qty: 5 }] }
+	new Order("ORD-001", "CUS-001", "2024-06-01", 10000, 12, 8800, [{ orderId: "ORD-001", itemId: "ITM-001", qty: 2 }]),
+	new Order("ORD-002", "CUS-002", "2024-06-02", 13000, 5, 12350, [{ orderId: "ORD-002", itemId: "ITM-002", qty: 1 }, { orderId: "ORD-002", itemId: "ITM-003", qty: 3 }]),
+	new Order("ORD-003", "CUS-003", "2024-06-03", 34000, 0, 34000, [{ orderId: "ORD-003", itemId: "ITM-004", qty: 4 }]),
+	new Order("ORD-004", "CUS-004", "2024-06-04", 11000, 8, 10120, [{ orderId: "ORD-004", itemId: "ITM-005", qty: 2 }, { orderId: "ORD-004", itemId: "ITM-001", qty: 1 }]),
+	new Order("ORD-005", "CUS-005", "2024-06-05", 10000, 10, 9000, [{ orderId: "ORD-005", itemId: "ITM-003", qty: 5 }])
 ];
-
-
-

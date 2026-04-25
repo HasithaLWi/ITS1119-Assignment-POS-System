@@ -2,6 +2,9 @@ import { UserModel } from "../model/userModel.js";
 import { User } from "../dto/user.js";
 import { showAlert, showConfirm } from "../utils/showAlert.js";
 
+
+
+
 window.addEventListener("message", (event) => {
     if (event.data && event.data.type === "SET_ACCENT") {
         document.body.style.setProperty("--accent-color", event.data.color);
@@ -370,7 +373,7 @@ function showUserMessage(inputField, message = "", type) {
     const msgElement = msgElements[inputField];
     if (msgElement) {
         if (type === "error") {
-            msgElement.style.color = "red";
+            msgElement.style.color = "#dc3545";
             msgElement.innerHTML = `<i class="bi bi-exclamation-circle"></i> ${message}`;
             msgElement.classList.remove("hidden");
         } else if (type === "success") {
@@ -436,7 +439,7 @@ export function resetUserPage() {
     loadUserTable();
 }
 
-// Auto-load when the iframe document is ready
+
 $(document).ready(() => {
     loadAllUsers();
     loadUserTable();

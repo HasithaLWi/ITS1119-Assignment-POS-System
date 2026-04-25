@@ -154,7 +154,7 @@ input::placeholder {
     overflow: visible;
     border-radius: 12px;
 
-    background: transparent;
+    background: rgba(0, 0, 0, 0.55);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     box-shadow: var(--glass-shadow);
@@ -204,7 +204,7 @@ input::placeholder {
 .table-container {
     width: 100%;
     border-radius: 12px;
-    background: transparent;
+    background: rgba(0, 0, 0, 0.55);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     /* border: 1px solid color-mix(in srgb, var(--accent) 15%, var(--glass-border)); */

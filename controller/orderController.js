@@ -9,7 +9,7 @@ import { CartItem } from "../dto/tm/cartItem.js";
 import { Order } from "../dto/order.js";
 import { OrderDetails } from "../dto/orderDetails.js";
 import { showOrderUpdateButton, navigateToOrderFromHistory } from "./orderHistoryController.js";
-import { showAlert } from "../utils/showAlert.js";
+import { showAlert, showConfirm } from "../utils/showAlert.js";
 
 
 
@@ -351,7 +351,7 @@ export function calculateOrderTotals() {
 	totalLabel.textContent = totalDisplay;
 	subtotalLabel.textContent = subtotalDisplay;
 	balanceField.value = balance;
-	setupChangeAndDue(); // Recalculate change/due based on updated totals and paid amount
+	setupChangeAndDue();
 }
 
 const cashInputField = document.getElementById("cash-input");
@@ -366,7 +366,7 @@ if (discountInputField) {
 
 
 
-export function placeOrder() {
+export async function placeOrder() {
 
 	const newOrderId = orderModelInstance.generateNewOrderId();
 	const customerId = document.getElementById("order-cust-id").value.trim();
@@ -399,9 +399,15 @@ export function placeOrder() {
 		paid,
 		details);
 
-	orderModelInstance.placeOrder(newOrder);
+	const isConfirmed = await showConfirm("Confirmation Alert", "Are you sure you want to place this order?", "question");
+	let result = false;
+	if (isConfirmed) {
+		result = orderModelInstance.placeOrder(newOrder);
+	}
 
-	showAlert("Order Placed", "Order placed successfully!", "success");
+	if (result) {
+		showAlert(result.title, result.message, result.type);
+	}
 	loadItems();
 	loadItemTable();
 	resetDashboard();
@@ -409,7 +415,7 @@ export function placeOrder() {
 	resetOrderHistory();
 }
 
-export function updateOrder() {
+export async function updateOrder() {
 	const orderId = document.getElementById("order-id-display").value.trim();
 	const customerIdFieldValue = document.getElementById("order-cust-id").value.trim();
 	const orderDate = document.getElementById("order-date").value;
@@ -460,7 +466,15 @@ export function updateOrder() {
 		updatedDetails
 	);
 
-	orderModelInstance.updateOrder(updatedOrder);
+	const isConfirmed = await showConfirm("Confirmation Alert", "Are you sure you want to update this order?", "question");
+	let result = false;
+	if (isConfirmed) {
+		result = orderModelInstance.updateOrder(updatedOrder);
+	}
+
+	if (result) {
+		showAlert(result.title, result.message, result.type);
+	}
 
 	resetDashboard();
 	resetOrderForm();

@@ -100,6 +100,116 @@ header {
     z-index: 1000;
 }
 
+
+.side-menubar-container {
+    position: fixed;
+    right: 0;
+    top: 0;
+    transform: translate(0, 20%);
+    min-height: 450px;
+    height: 45vh;
+    width: 300px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-left: 1px solid var(--accent);
+    border-bottom: 1px solid var(--accent);
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.04);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-menubar-header {
+    background: color-mix(in srgb, var(--accent) 80%, transparent 20%);
+    padding: 30px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.side-menubar-profile-picture {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    overflow: hidden;
+    width: 70px;
+    height: 70px;
+}
+
+
+.side-menubar-header-title {
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+.side-menubar-nav {
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+.side-nav-item {
+    padding: 12px 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: var(--text-main);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.side-nav-item i {
+    font-size: 24px;
+    color: var(--accent);
+    transition: transform 0.3s ease;
+}
+
+.side-nav-item:hover {
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    border-left-color: var(--accent);
+}
+
+.side-nav-item:hover i {
+    transform: scale(1.1);
+}
+
+.side-menubar-footer {
+    padding: 20px 25px 30px 25px;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+#side-logout {
+    border: 1px solid var(--accent);
+    border-radius: 25px;
+    color: var(--accent);
+    width: 100%;
+    justify-content: center;
+    padding: 10px 15px;
+    font-weight: 700;
+    gap: 0;
+    background-color: transparent;
+    transition: all 0.3s ease;
+}
+
+#side-logout:hover {
+    background-color: var(--accent);
+    color: white;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+
 .color-circle {
     width: 20px;
     height: 20px;

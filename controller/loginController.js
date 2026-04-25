@@ -4,7 +4,7 @@ import { resetOrderHistory } from "./orderHistoryController.js";
 import { resetCustomerpage } from "./customerController.js";
 import { resetItemPage } from "./itemController.js";
 import { UserModel } from "../model/userModel.js";
-import { showAlert } from "../utils/showAlert.js";
+import { showAlert, showConfirm } from "../utils/showAlert.js";
 
 const userModelInstance = new UserModel();
 
@@ -12,7 +12,7 @@ function getUserByUsername(username) {
     return userModelInstance.getUserByUsername(username);
 }
 
-// --- Authentication Logic ---
+
 
 const loginBtn = document.getElementById("login-btn");
 loginBtn.addEventListener("click", (event) => {
@@ -25,18 +25,20 @@ loginBtn.addEventListener("click", (event) => {
         return;
     } else if (getUserByUsername(username).isValid === false) {
         showAlert("Invalid Username", "Invalid username. Please try again.", "error");
+        resetLoginPage();
         return;
     }
 
     if (password === "") {
         showAlert("Password Required", "Please enter a password.", "warning");
+
         return;
     } else if (password !== getUserByUsername(username).user.password) {
         showAlert("Invalid Password", "Invalid password. Please try again.", "error");
-        console.log(getUserByUsername(username).user.password);
-        console.log(password);
+        resetLoginPage();
         return;
     }
+    resetLoginPage();
 
     document.getElementById("welcome-message").textContent = `Welcome, ${username}!`;
     document.getElementById("login").classList.add("hidden");
@@ -49,3 +51,19 @@ loginBtn.addEventListener("click", (event) => {
     resetDashboard();
 
 });
+
+const sideLogoutBtn = document.getElementById("side-logout");
+sideLogoutBtn.addEventListener("click", async (event) => {
+    event.preventDefault();
+    if (await showConfirm("Logout", "Are you sure you want to logout?", "warning")) {
+        document.getElementById("login").classList.remove("hidden");
+        document.getElementById("main-app").classList.add("hidden");
+
+        resetLoginPage();
+    }
+});
+
+function resetLoginPage() {
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+}

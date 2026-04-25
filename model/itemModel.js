@@ -16,7 +16,7 @@ export class ItemModel {
         let isDuplicate = false;
         itemDB.forEach(existingItem => {
             if (existingItem.name === item.name) {
-                alert("Item with this name already exists.");
+                showAlert("Error", "Item with this name already exists.", "error");
                 isDuplicate = true;
                 return;
             }
@@ -25,17 +25,17 @@ export class ItemModel {
             return;
         }
         itemDB.push(item);
-        // alert("Item added successfully.");
-        showAlert("Item Added", "Item added successfully.", "success");
+
+        showAlert("Success", "Item added successfully.", "success");
     }
 
     updateItem(updatedItem) {
         const index = itemDB.findIndex(item => item.id === updatedItem.id);
         if (index >= 0 && index < itemDB.length) {
             itemDB[index] = { ...itemDB[index], ...updatedItem };
-            alert("Item updated successfully.");
+            showAlert("Success", "Item updated successfully.", "success");
         } else {
-            alert("Item not found.");
+            showAlert("Error", "Item not found.", "error");
         }
     }
 
@@ -44,13 +44,13 @@ export class ItemModel {
         const orderDetails = ordersDetailsList.find(od => od.itemId === id);
         if (index >= 0 && index < itemDB.length) {
             if (orderDetails) {
-                alert("Cannot delete item. It is associated with an existing order.");
+                showAlert("Error", "Cannot delete item. It is associated with an existing order.", "error");
                 return;
             }
             itemDB.splice(index, 1);
-            alert("Item deleted successfully.");
+            showAlert("Success", "Item deleted successfully.", "success");
         } else {
-            alert("Item not found.");
+            showAlert("Error", "Item not found.", "error");
         }
     }
 

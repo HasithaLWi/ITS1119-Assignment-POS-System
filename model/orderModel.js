@@ -26,7 +26,7 @@ export class OrderModel {
         ordersDetailsList.push(...details);
         ordersList.push(newOrder);
 
-        alert("Order placed successfully!");
+        return { title: "Success", message: "Order placed successfully.", type: "success" };
     }
 
     formatOrderId(id) {
@@ -44,15 +44,13 @@ export class OrderModel {
     updateOrder(updatedOrder) {
 
         if (!updatedOrder || !updatedOrder.id) {
-            alert("Invalid order data. Update failed.");
-            return;
+            return { title: "Error", message: "Invalid order data. Update failed.", type: "error" };
         }
         const orderId = updatedOrder.id;
         const existingOrderIndex = ordersList.findIndex(order => order.id === orderId);
 
         if (existingOrderIndex === -1) {
-            alert("Order not found. Update failed.");
-            return;
+            return { title: "Error", message: "Order not found. Update failed.", type: "error" };
         }
 
 
@@ -89,6 +87,6 @@ export class OrderModel {
         }
         ordersDetailsList.push(...updatedDetails);
 
-        alert("Order updated successfully!");
+        return { title: "Success", message: "Order updated successfully.", type: "success" };
     }
 }

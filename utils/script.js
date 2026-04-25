@@ -20,6 +20,7 @@ window.updateOrder = updateOrder;
 window.resetOrderHistory = resetOrderHistory;
 window.saveUser = saveUser;
 
+
 function applyAccent(accentColor) {
 	document.body.style.setProperty("--accent", accentColor);
 
@@ -88,19 +89,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	const userBtn = document.getElementById("user-btn");
 	const userManagerOverlay = document.getElementById("user-manager-overlay");
-	if (userBtn && userManagerOverlay) {
-		userBtn.addEventListener("click", () => {
-			userManagerOverlay.style.display = "flex";
+	const sideMenubar = document.querySelector(".side-menubar-container");
+	const sideProfileBtn = document.getElementById("side-profile");
 
+	if (userBtn && sideMenubar) {
+		userBtn.addEventListener("click", (e) => {
+			e.stopPropagation();
+			sideMenubar.classList.toggle("hidden");
 		});
 	}
+
+	if (sideProfileBtn && userManagerOverlay) {
+		sideProfileBtn.addEventListener("click", () => {
+			sideMenubar.classList.add("hidden");
+			userManagerOverlay.style.display = "flex";
+		});
+	}
+
+	document.addEventListener("click", (e) => {
+		if (sideMenubar && !sideMenubar.contains(e.target) && e.target !== userBtn) {
+			sideMenubar.classList.add("hidden");
+		}
+	});
 
 	window.closeUserManager = function () {
 		if (userManagerOverlay) {
 			userManagerOverlay.style.display = "none";
 		}
 	};
+
+
 });
+
 
 // --- Navigation Logic ---
 export const navLinks = document.querySelectorAll('.nav-link');

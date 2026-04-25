@@ -152,9 +152,9 @@ export function resetItemPage() {
 
 
 // Delete Item
-document.addEventListener("click", (event) => {
+document.addEventListener("click", async (event) => {
 	if (event.target.classList.contains("item-delete-btn")) {
-		if (!confirm("Are you sure you want to delete this item?")) {
+		if (!await showConfirm("Confirmation Alert", "Are you sure you want to delete this item?", "question")) {
 			return;
 		}
 

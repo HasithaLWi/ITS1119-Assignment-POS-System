@@ -86,6 +86,22 @@
                     <i class="bi bi-person-circle"></i>
                 </button>
             </div>
+
+            <div class="side-menubar-container hidden">
+                <div class="side-menubar-header">
+                    <div class="side-menubar-profile-picture">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <div class="side-menubar-header-title">ADMIN</div>
+                </div>
+                <div class="side-menubar-nav">
+                    <div class="side-nav-item" id="side-profile"><i class="bi bi-person-circle"></i>Manage Users</div>
+                    <div class="side-nav-item" id="side-settings"><i class="bi bi-gear"></i>Settings</div>
+                </div>
+                <div class="side-menubar-footer">
+                    <button class="" id="side-logout">Logout</button>
+                </div>
+            </div>
         </header>
 
         <main>
@@ -475,14 +491,14 @@
         </div>
     </footer>
 
-    <!-- User Manager Overlay -->
+
     <div id="user-manager-overlay">
         <iframe src="user_manager.html"
             style="width: 100%; height: 100%; border: none; background: transparent;"></iframe>
     </div>
 
 
-    <!-- SweetAlert2 must load before ES modules so Swal is globally available -->
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
