@@ -6,6 +6,11 @@ A modern, feature-rich **Point of Sale (POS) System** built with vanilla HTML, C
 > **Author:** Hasitha Wijesinghe
 
 ---
+### Deployment:
+
+https://project-web-pos.vercel.app
+
+---
 
 
 ### Default Login Credentials
@@ -17,9 +22,3 @@ A modern, feature-rich **Point of Sale (POS) System** built with vanilla HTML, C
 | Cashier  | `user2`  | `password2` |
 
 ---
-
-
-
-## 📝 License
-
-© 2026 **Hasitha Wijesinghe** | All Rights Reserved
