@@ -1,4 +1,4 @@
-import { ordersList, customerDB } from "../db/data.js";
+import { orderDB, customerDB } from "../db/data.js";
 import { resetDashboard } from "./dashboardController.js";
 import { loadItems, loadItemTable, resetItemPage } from "./itemController.js";
 import { resetOrderHistory, hideOrderUpdateButton } from "./orderHistoryController.js";
@@ -35,11 +35,9 @@ const itemSelector = document.getElementById("order-item-select");
 
 function setupDateAndOrderId() {
 
-	// Generate new order ID and set to order form
 	const newOrderId = orderModelInstance.generateNewOrderId();
 	document.getElementById("order-id-display").value = newOrderId;
 
-	// Set today's date to order form
 	const orderDateInput = document.getElementById("order-date");
 	const today = new Date().toISOString().split("T")[0];
 	if (orderDateInput) {
@@ -50,13 +48,7 @@ function setupDateAndOrderId() {
 
 export function loadOrderPage() {
 
-
-
-
 	setupDateAndOrderId();
-
-
-	// Populate customer dropdown in order form
 	customerSelector.innerHTML = "";
 
 
@@ -78,7 +70,6 @@ export function loadOrderPage() {
 		customerSelector.appendChild(option);
 	});
 
-	// Populate item dropdown in order form
 	itemSelector.innerHTML = "";
 
 	const itemOptionDefault = document.createElement("option");
@@ -392,6 +383,11 @@ export async function placeOrder() {
 		cartItem.qty
 	));
 
+
+	if (paid > Number(subtotalDisplay)) {
+		paid = Number(subtotalDisplay);
+	}
+
 	const newOrder = new Order(
 		newOrderId, customerId === "" ? null : customerId,
 		orderDate, totalDisplay,
@@ -413,73 +409,6 @@ export async function placeOrder() {
 	resetDashboard();
 	resetOrderForm();
 	resetOrderHistory();
-}
-
-export async function updateOrder() {
-	const orderId = document.getElementById("order-id-display").value.trim();
-	const customerIdFieldValue = document.getElementById("order-cust-id").value.trim();
-	const orderDate = document.getElementById("order-date").value;
-	const discountPreField = document.getElementById("discount-input");
-	const paidField = document.getElementById("cash-input");
-	let partialPaidAmount = document.getElementById("order-paid-display").textContent.trim();
-
-
-
-	if (orderId === "") {
-		showAlert("No Order Selected", "Please select an order to update.", "info");
-		return;
-	}
-
-	const existingOrder = ordersList.find(order => order.id === orderId);
-	partialPaidAmount = existingOrder ? Number(existingOrder.paid) : 0;
-
-	if (!existingOrder) {
-		showAlert("Order Not Found", "Selected order not found.", "error");
-		return;
-	}
-
-	if (itemCartList.length === 0) {
-		showAlert("Cart Empty", "Please add at least one item to the cart before updating the order.", "warning");
-		return;
-	}
-
-	const validation = isPlaceOrderFormValid();
-	if (!validation.isValid) {
-		showAlert("Invalid Order", validation.message, "warning");
-		return;
-	}
-
-
-	const updatedDetails = itemCartList.map((cartItem) => new OrderDetails(
-		orderId,
-		cartItem.itemId,
-		cartItem.qty
-	));
-
-	const updatedOrder = new Order(
-		orderId,
-		customerIdFieldValue === "" ? null : customerIdFieldValue,
-		orderDate,
-		totalDisplay,
-		discountPreField.value.trim() === "" ? "0" : discountPreField.value,
-		Number(paidField.value) + Number(partialPaidAmount),
-		updatedDetails
-	);
-
-	const isConfirmed = await showConfirm("Confirmation Alert", "Are you sure you want to update this order?", "question");
-	let result = false;
-	if (isConfirmed) {
-		result = orderModelInstance.updateOrder(updatedOrder);
-	}
-
-	if (result) {
-		showAlert(result.title, result.message, result.type);
-	}
-
-	resetDashboard();
-	resetOrderForm();
-	resetOrderHistory();
-	resetItemPage();
 }
 
 // validate place order form
@@ -518,7 +447,7 @@ function isPlaceOrderFormValid() {
 		return { isValid: false, message: "Please enter the amount paid." };
 
 	} else if (isNaN(paidField.value) || Number.isNaN(Number(paidField.value))
-		|| Number(paidField.value) < 0 || Number(paidField.value) > subtotalAmount) {
+		|| Number(paidField.value) < 0 || Number(paidField.value) < subtotalAmount) {
 
 		return { isValid: false, message: "Please enter a valid amount paid." };
 
@@ -582,7 +511,7 @@ function isPaidFieldValid() {
 	const subtotalAmount = Number(subtotalElement ? subtotalElement.textContent : 0);
 	if (paidField.value.trim() === "" || paidField.value === null) {
 		return { isValid: false };
-	} else if (Number.isNaN(Number(paidField.value)) || Number(paidField.value) < 0 || Number(paidField.value) > subtotalAmount) {
+	} else if (Number.isNaN(Number(paidField.value)) || Number(paidField.value) < 0 || Number(paidField.value) < subtotalAmount) {
 		return { isValid: false };
 	} else if (isNaN(paidField.value)) {
 		return { isValid: false };
@@ -652,7 +581,7 @@ document.addEventListener("click", (event) => {
 	if (event.target.tagName === "TD" && event.target.parentElement.parentElement.id === "history-table-body") {
 		const cells = event.target.parentElement.children;
 		const orderId = cells[0].textContent.trim();
-		const order = ordersList.find(o => o.id === orderId);
+		const order = orderDB.find(o => o.id === orderId);
 		if (order) {
 			document.getElementById("order-id-display").value = order.id;
 			document.getElementById("order-date").value = order.date;

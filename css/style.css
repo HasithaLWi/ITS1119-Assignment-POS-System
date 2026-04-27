@@ -1,9 +1,12 @@
 :root {
     --bg-main: #eef3ff;
     --bg-card: #ffffff;
-    --accent: #d84c6f;
-    --newAccent: #FF8C00;
-    --newAccent2: #FFD54F;
+    --accent: #2ecc71;
+    --accent2: #ff8c00;
+    --accent3: #f1c40f;
+    --accent4: #3498db;
+    --accent5: #f04b66;
+    --accent6: #9b59b6;
     --text-main: #ffffff;
     --text-muted: #8f96a7;
     --input-bg: #e8efff;
@@ -210,59 +213,6 @@ header {
 }
 
 
-.color-circle {
-    width: 20px;
-    height: 20px;
-    background-color: var(--accent);
-    border: 2px solid rgba(255, 255, 255, 0.35);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.accent-picker {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-}
-
-.accent-palette {
-    position: absolute;
-    top: calc(100% + 10px);
-    right: -6px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    width: 126px;
-    padding: 10px;
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    z-index: 1200;
-}
-
-.accent-swatch {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2px solid transparent;
-    background-color: var(--swatch);
-    cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.accent-swatch:hover {
-    transform: scale(1.08);
-}
-
-.accent-swatch.active {
-    border-color: var(--accent);
-    transform: scale(1.05);
-}
-
 .logo {
     display: flex;
     align-items: center;
@@ -428,7 +378,7 @@ input::placeholder {
 .logo-circle {
     width: 60px;
     height: 60px;
-    background-color: rgba(240, 75, 102, 0.1);
+    background-color: color-mix(in srgb, var(--accent) 10%, transparent);
     color: var(--accent);
     border-radius: 50%;
     display: flex;
@@ -501,12 +451,12 @@ input::placeholder {
     cursor: pointer;
     margin-top: 16px;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(240, 75, 102, 0.3);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
 .login-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(240, 75, 102, 0.4);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 30%, transparent);
     opacity: 0.95;
 }
 

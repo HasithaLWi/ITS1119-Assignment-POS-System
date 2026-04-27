@@ -27,8 +27,8 @@ export const usersDB = [
 	new User("UID-002", "user1", "password1", "Cashier", "User One", "Colombo", "0712345678", "user1@example.com"),
 	new User("UID-003", "user2", "password2", "Cashier", "User Two", "Kandy", "0779876543", "user2@example.com")
 ];
-
-export const ordersDetailsList = [
+//ordersDetailsList
+export const ordersDetailsDB = [
 	new OrderDetails("ORD-001", "ITM-001", 2),
 	new OrderDetails("ORD-002", "ITM-002", 1),
 	new OrderDetails("ORD-002", "ITM-003", 3),
@@ -38,7 +38,8 @@ export const ordersDetailsList = [
 	new OrderDetails("ORD-005", "ITM-003", 5)
 ];
 
-export const ordersList = [
+//ordersList
+export const orderDB = [
 	new Order("ORD-001", "CUS-001", "2024-06-01", 10000, 12, 8800, [{ orderId: "ORD-001", itemId: "ITM-001", qty: 2 }]),
 	new Order("ORD-002", "CUS-002", "2024-06-02", 13000, 5, 12350, [{ orderId: "ORD-002", itemId: "ITM-002", qty: 1 }, { orderId: "ORD-002", itemId: "ITM-003", qty: 3 }]),
 	new Order("ORD-003", "CUS-003", "2024-06-03", 34000, 0, 34000, [{ orderId: "ORD-003", itemId: "ITM-004", qty: 4 }]),

@@ -2,16 +2,6 @@ import { UserModel } from "../model/userModel.js";
 import { User } from "../dto/user.js";
 import { showAlert, showConfirm } from "../utils/showAlert.js";
 
-
-
-
-window.addEventListener("message", (event) => {
-    if (event.data && event.data.type === "SET_ACCENT") {
-        document.body.style.setProperty("--accent-color", event.data.color);
-    }
-});
-
-
 const userModelInstance = new UserModel();
 let userDataList = [];
 

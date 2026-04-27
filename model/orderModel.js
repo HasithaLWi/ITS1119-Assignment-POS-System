@@ -1,12 +1,12 @@
-import { itemDB, ordersList, ordersDetailsList } from "../db/data.js";
+import { itemDB, orderDB, ordersDetailsDB } from "../db/data.js";
 
 export class OrderModel {
 
     getAllOrders() {
-        if (ordersList.length === 0) {
+        if (orderDB.length === 0) {
             return { isEmpty: true, orders: [] };
         } else {
-            return { isEmpty: false, orders: [...ordersList] };
+            return { isEmpty: false, orders: [...orderDB] };
         }
     }
 
@@ -23,8 +23,8 @@ export class OrderModel {
             }
         });
 
-        ordersDetailsList.push(...details);
-        ordersList.push(newOrder);
+        ordersDetailsDB.push(...details);
+        orderDB.push(newOrder);
 
         return { title: "Success", message: "Order placed successfully.", type: "success" };
     }
@@ -34,7 +34,7 @@ export class OrderModel {
     }
 
     generateNewOrderId() {
-        const maxId = ordersList.reduce((max, order) => {
+        const maxId = orderDB.reduce((max, order) => {
             const numPart = parseInt(order.id.split("-")[1], 10);
             return Math.max(max, numPart);
         }, 0);
@@ -47,14 +47,14 @@ export class OrderModel {
             return { title: "Error", message: "Invalid order data. Update failed.", type: "error" };
         }
         const orderId = updatedOrder.id;
-        const existingOrderIndex = ordersList.findIndex(order => order.id === orderId);
+        const existingOrderIndex = orderDB.findIndex(order => order.id === orderId);
 
         if (existingOrderIndex === -1) {
             return { title: "Error", message: "Order not found. Update failed.", type: "error" };
         }
 
 
-        const existingOrder = ordersList[existingOrderIndex];
+        const existingOrder = orderDB[existingOrderIndex];
         const previousDetails = Array.isArray(existingOrder.orderDetails) ? existingOrder.orderDetails : [];
 
 
@@ -68,7 +68,7 @@ export class OrderModel {
         });
 
 
-        ordersList[existingOrderIndex] = updatedOrder;
+        orderDB[existingOrderIndex] = updatedOrder;
 
         const updatedDetails = updatedOrder.orderDetails;
 
@@ -80,12 +80,12 @@ export class OrderModel {
         });
 
 
-        for (let i = ordersDetailsList.length - 1; i >= 0; i -= 1) {
-            if (ordersDetailsList[i].orderId === orderId) {
-                ordersDetailsList.splice(i, 1);
+        for (let i = ordersDetailsDB.length - 1; i >= 0; i -= 1) {
+            if (ordersDetailsDB[i].orderId === orderId) {
+                ordersDetailsDB.splice(i, 1);
             }
         }
-        ordersDetailsList.push(...updatedDetails);
+        ordersDetailsDB.push(...updatedDetails);
 
         return { title: "Success", message: "Order updated successfully.", type: "success" };
     }

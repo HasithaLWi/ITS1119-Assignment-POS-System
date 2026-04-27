@@ -32,7 +32,7 @@ function updateDashboardStats() {
             const total = Number(order.total);
             const discount = Number(order.discount);
 
-            if (Number.isFinite(total) && Number.isFinite(discount)) {
+            if (Number.isFinite(total) && Number.isFinite(discount)) { //
                 return sum + (total - discount);
             }
 

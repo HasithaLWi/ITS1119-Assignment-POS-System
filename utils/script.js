@@ -1,9 +1,6 @@
-const ACCENT_KEY = "pos-accent";
-
-
 import { saveCustomer, updateCustomer, resetCustomerpage } from "../controller/customerController.js";
 import { saveItem, updateItem, resetItemPage } from "../controller/itemController.js";
-import { addItemToCart, placeOrder, updateOrder, resetOrderForm } from "../controller/orderController.js";
+import { addItemToCart, placeOrder, resetOrderForm } from "../controller/orderController.js";
 import { resetOrderHistory } from "../controller/orderHistoryController.js";
 import { saveUser } from "../controller/userController.js";
 
@@ -16,76 +13,11 @@ window.resetItemPage = resetItemPage;
 window.addItemToCart = addItemToCart;
 window.resetOrderForm = resetOrderForm;
 window.placeOrder = placeOrder;
-window.updateOrder = updateOrder;
 window.resetOrderHistory = resetOrderHistory;
 window.saveUser = saveUser;
 
 
-function applyAccent(accentColor) {
-	document.body.style.setProperty("--accent", accentColor);
-
-
-	const iframe = document.querySelector("#user-manager-overlay iframe");
-	if (iframe && iframe.contentWindow) {
-		iframe.contentWindow.postMessage({ type: "SET_ACCENT", color: accentColor }, "*");
-	}
-}
-
-export function initAccentPicker() {
-	const accentPicker = document.getElementById("accent-picker");
-	const colorCircle = document.getElementById("color-theme-circle");
-	const accentPalette = document.getElementById("accent-palette");
-	const swatches = document.querySelectorAll(".accent-swatch");
-
-	if (swatches.length === 0) {
-		return;
-	}
-
-	const defaultAccent = getComputedStyle(document.body).getPropertyValue("--accent").trim() || "#f04b66";
-	const savedAccent = localStorage.getItem(ACCENT_KEY) || defaultAccent;
-
-
-
-	applyAccent(savedAccent);
-	swatches.forEach((swatch) => {
-		swatch.classList.toggle("active", swatch.dataset.color === savedAccent);
-	});
-
-	colorCircle.addEventListener("click", (event) => {
-		event.stopPropagation();
-		accentPalette.classList.toggle("hidden");
-	});
-
-	swatches.forEach((swatch) => {
-		swatch.addEventListener("click", (event) => {
-			event.stopPropagation();
-			const selectedAccent = swatch.dataset.color;
-
-			if (!selectedAccent) {
-				return;
-			}
-
-			applyAccent(selectedAccent);
-			localStorage.setItem(ACCENT_KEY, selectedAccent);
-
-			swatches.forEach((item) => item.classList.remove("active"));
-			swatch.classList.add("active");
-
-			accentPalette.classList.add("hidden");
-		});
-	});
-
-	document.addEventListener("click", (event) => {
-		if (!accentPicker.contains(event.target)) {
-			accentPalette.classList.add("hidden");
-		}
-	});
-}
-
-
-
 document.addEventListener("DOMContentLoaded", () => {
-	initAccentPicker();
 
 	const userBtn = document.getElementById("user-btn");
 	const userManagerOverlay = document.getElementById("user-manager-overlay");

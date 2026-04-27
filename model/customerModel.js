@@ -1,5 +1,5 @@
 
-import { customerDB, ordersList } from "../db/data.js";
+import { customerDB, orderDB } from "../db/data.js";
 
 export class customerModel {
 
@@ -31,7 +31,7 @@ export class customerModel {
     // Delete Customer
     deleteCustomer(customerId) {
         const index = customerDB.findIndex(c => c.id === customerId);
-        const orderIndex = ordersList.findIndex(o => o.customerId === customerId);
+        const orderIndex = orderDB.findIndex(o => o.customerId === customerId);
         if (index >= 0 && index < customerDB.length) {
             if (orderIndex >= 0) {
 

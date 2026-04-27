@@ -1,7 +1,12 @@
 :root {
     --bg-main: #eef3ff;
     --bg-card: #ffffff;
-    --accent-color: #d84c6f;
+    --accent-color: #2ecc71;
+    --accent2-color: #ff8c00;
+    --accent3-color: #f1c40f;
+    --accent4-color: #3498db;
+    --accent5-color: #f04b66;
+    --accent6-color: #9b59b6;
     --text-main: #ffffff;
     --text-muted: #8f96a7;
 

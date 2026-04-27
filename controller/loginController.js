@@ -40,7 +40,7 @@ loginBtn.addEventListener("click", (event) => {
     }
     resetLoginPage();
 
-    document.getElementById("welcome-message").textContent = `Welcome, ${username}!`;
+
     document.getElementById("login").classList.add("hidden");
     document.getElementById("main-app").classList.remove("hidden");
 

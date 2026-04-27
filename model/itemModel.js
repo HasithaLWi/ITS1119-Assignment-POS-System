@@ -1,4 +1,4 @@
-import { itemDB, ordersDetailsList } from "../db/data.js";
+import { itemDB, ordersDetailsDB } from "../db/data.js";
 import { showAlert } from "../utils/showAlert.js";
 
 export class ItemModel {
@@ -41,7 +41,7 @@ export class ItemModel {
 
     deleteItem(id) {
         const index = itemDB.findIndex(item => item.id === id);
-        const orderDetails = ordersDetailsList.find(od => od.itemId === id);
+        const orderDetails = ordersDetailsDB.find(od => od.itemId === id);
         if (index >= 0 && index < itemDB.length) {
             if (orderDetails) {
                 showAlert("Error", "Cannot delete item. It is associated with an existing order.", "error");
