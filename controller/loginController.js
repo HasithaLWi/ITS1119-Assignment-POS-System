@@ -3,6 +3,7 @@ import { resetOrderForm } from "./orderController.js";
 import { resetOrderHistory } from "./orderHistoryController.js";
 import { resetCustomerpage } from "./customerController.js";
 import { resetItemPage } from "./itemController.js";
+import { resetUserPage } from "./userController.js";
 import { UserModel } from "../model/userModel.js";
 import { showAlert, showConfirm } from "../utils/showAlert.js";
 
@@ -63,6 +64,7 @@ loginBtn.addEventListener("click", (event) => {
     resetOrderForm();
     resetOrderHistory();
     resetDashboard();
+    resetUserPage();
 
 });
 

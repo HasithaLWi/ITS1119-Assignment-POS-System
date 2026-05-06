@@ -30,10 +30,11 @@ function updateDashboardStats() {
     if (statRevenue) {
         const totalRevenue = ordersDataList.reduce((sum, order) => {
             const total = Number(order.total);
-            const discount = Number(order.discount);
+            const discount = Number(order.discount) * (total / 100);
+            const totalPaid = total - discount;
 
-            if (Number.isFinite(total) && Number.isFinite(discount)) { //
-                return sum + (total - discount);
+            if (Number.isFinite(total) && Number.isFinite(discount) && Number.isFinite(totalPaid)) {
+                return sum + totalPaid;
             }
 
             const paid = Number(order.paid);

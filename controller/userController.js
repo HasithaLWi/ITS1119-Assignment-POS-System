@@ -283,6 +283,12 @@ export function validateField(fieldId, value, skipDuplicateCheck = false) {
         } else if (!/^[a-zA-Z0-9]{3,}$/.test(value)) {
             isValid = false;
             message = "Username must be at least 3 characters.";
+        } else if (!skipDuplicateCheck) {
+            const existingUser = userDataList.find(u => u.username === value);
+            if (existingUser) {
+                isValid = false;
+                message = "Username already exists.";
+            }
         }
         showUserMessage("username", message, isValid ? "success" : "error");
     } else if (fieldId === "user-password-input") {
@@ -429,12 +435,7 @@ export function resetUserPage() {
     loadUserTable();
 }
 
-
-$(document).ready(() => {
-    loadAllUsers();
-    loadUserTable();
-});
-
-
-
-
+export function closeUserManager() {
+    document.getElementById("user-manager-overlay").style.display = "none";
+    resetUserPage();
+}

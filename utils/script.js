@@ -2,7 +2,7 @@ import { saveCustomer, updateCustomer, resetCustomerpage } from "../controller/c
 import { saveItem, updateItem, resetItemPage } from "../controller/itemController.js";
 import { addItemToCart, placeOrder, resetOrderForm } from "../controller/orderController.js";
 import { resetOrderHistory } from "../controller/orderHistoryController.js";
-import { saveUser } from "../controller/userController.js";
+import { saveUser, closeUserManager } from "../controller/userController.js";
 
 window.saveCustomer = saveCustomer;
 window.updateCustomer = updateCustomer;
@@ -15,6 +15,7 @@ window.resetOrderForm = resetOrderForm;
 window.placeOrder = placeOrder;
 window.resetOrderHistory = resetOrderHistory;
 window.saveUser = saveUser;
+window.closeUserManager = closeUserManager;
 
 
 document.addEventListener("DOMContentLoaded", () => {

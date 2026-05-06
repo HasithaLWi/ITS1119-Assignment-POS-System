@@ -12,7 +12,6 @@ https://project-web-pos.vercel.app
 
 ---
 
-
 ### Default Login Credentials
 
 | Role     | Username | Password    |

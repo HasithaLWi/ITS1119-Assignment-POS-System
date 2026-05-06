@@ -9,6 +9,7 @@
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <!-- <link rel="stylesheet" href="css/user.css"> -->
 </head>
 
 <body>
@@ -471,10 +472,112 @@
     </footer>
 
 
-    <div id="user-manager-overlay">
-        <iframe src="user_manager.html"
-            style="width: 100%; height: 100%; border: none; background: transparent;"></iframe>
-    </div>
+    <section id="user-manager-overlay">
+        <div class="user-modal position-relative d-flex flex-column">
+
+
+            <span class="close-btn" id="user-close-btn"><i class="bi bi-x-lg" onclick="closeUserManager()"></i></span>
+
+
+            <h2 class="page-title" style="padding: 32px 32px 0;">User Manager</h2>
+
+            <div class="scroll-container">
+
+
+                <div class="search-box">
+                    <input type="text" class="input-field user-search-box" id="user-search" placeholder="Search ...">
+                </div>
+
+
+                <form class="user-form-card" novalidate>
+                    <div class="form-card-header">
+                        <h3>User Details</h3>
+                    </div>
+                    <div class="user-form-card-field">
+                        <div class="input-box">
+                            <label class="input-field-labels">User ID:</label>
+                            <input type="text" class="input-field user-id-input form-input" id="user-id-input" readonly>
+                            <div class="input-massege hidden" id="user-id-massege"></div>
+                        </div>
+                        <div class="input-box">
+                            <label class="input-field-labels">User Name:</label>
+                            <input type="text" class="input-field user-name-input form-input" id="user-name-input">
+                            <div class="input-massege hidden" id="user-name-massege"></div>
+                        </div>
+                        <div class="input-box">
+                            <label class="input-field-labels">Address:</label>
+                            <input type="text" class="input-field user-address-input form-input"
+                                id="user-address-input">
+                            <div class="input-massege hidden" id="user-address-massege"></div>
+                        </div>
+                        <div class="input-box">
+                            <label class="input-field-labels">Phone:</label>
+                            <input type="text" class="input-field user-phone-input form-input" id="user-phone-input">
+                            <div class="input-massege hidden" id="user-phone-massege"></div>
+                        </div>
+                        <div class="input-box">
+                            <label class="input-field-labels">Email:</label>
+                            <input type="email" class="input-field user-email-input form-input" id="user-email-input">
+                            <div class="input-massege hidden" id="user-email-massege"></div>
+                        </div>
+                        <div class="input-box">
+                            <label class="input-field-labels">Username:</label>
+                            <input type="text" class="input-field user-username-input form-input"
+                                id="user-username-input">
+                            <div class="input-massege hidden" id="user-username-massege"></div>
+                        </div>
+                        <div class="input-box">
+                            <label class="input-field-labels">Password:</label>
+                            <input type="password" class="input-field user-password-input form-input"
+                                id="user-password-input">
+                            <div class="input-massege hidden" id="user-password-massege"></div>
+                        </div>
+                        <div class="input-box">
+                            <label class="input-field-labels">Role:</label>
+                            <select class="input-field user-role-input form-input" required id="user-role-input">
+                                <option value="">Select Role</option>
+                                <option value="Cashier">Cashier</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                            <div class="input-massege hidden" id="user-role-massege"></div>
+                        </div>
+                    </div>
+                    <div class="manage-buttons user-manage-btns">
+                        <button type="button" class="buttons btn btn-outline-success" id="user-save-btn">Save</button>
+                        <button type="button" class="buttons btn btn-outline-primary"
+                            id="user-update-btn">Update</button>
+                        <button type="button" class="buttons btn btn-outline-warning" id="user-reset-btn">Reset</button>
+                    </div>
+                </form>
+
+
+                <div class="user-table-container">
+                    <h3 class="table-header">Users</h3>
+                    <div style="overflow-x: auto; width: 100%;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Address</th>
+                                    <th>Phone</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <!--  -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
 
 
 
@@ -491,6 +594,7 @@
     <script type="module" src="controller/itemController.js"></script>
     <script type="module" src="controller/customerController.js"></script>
     <script type="module" src="controller/orderHistoryController.js"></script>
+    <script type="module" src="controller/userController.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
